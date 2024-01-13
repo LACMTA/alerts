@@ -48,7 +48,7 @@ fetch('https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/')
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        updateLastUpdated(data.header.timestamp);
+        // updateLastUpdated(data.header.timestamp);
         processAlerts(data.entity);
     });
 
@@ -179,8 +179,15 @@ function processAlerts(data) {
     console.log('----- railAlerts -----');
     console.log(railAlerts);
 
-    displayAlerts();
+    // displayAlerts();
     // displayAccess();
+
+    // If DOM is loaded, updateView(). Otherwise, wait for DOM to load.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateView);
+    } else {
+        updateView();
+    }
 }
 
 function splitLine(line) {
@@ -213,6 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector('#status-nav--all').addEventListener('click', handleStatusClick.bind(STATUS.ALL));
     document.querySelector('#status-nav--ongoing').addEventListener('click', handleStatusClick.bind(STATUS.ONGOING));
     document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
+
+    // updateView();
 });
 
 function handleServiceClick(e) {
@@ -282,44 +291,53 @@ function updateView() {
         switch(serviceSelected) {
             case SERVICE.RAIL:
                 icon.classList.add("alert-item__icon--rail");
-                let route = splitLine(alert.alert.informed_entity[0].route_id);
-                let image = document.createElement("img");
-                switch(route) {
+                let railRoute = splitLine(alert.alert.informed_entity[0].route_id);
+                let railIcon = document.createElement("img");
+                switch(railRoute) {
                     case '801':
-                        image.src = RAIL_ICONS['801'];
-                        image.alt = 'A Line';
+                        railIcon.src = RAIL_ICONS['801'];
+                        railIcon.alt = 'A Line';
                         break;
                     case '802':
-                        image.src = RAIL_ICONS['802'];
-                        image.alt = 'B Line';
+                        railIcon.src = RAIL_ICONS['802'];
+                        railIcon.alt = 'B Line';
                         break;
                     case '803':
-                        image.src = RAIL_ICONS['803'];
-                        image.alt = 'C Line';
+                        railIcon.src = RAIL_ICONS['803'];
+                        railIcon.alt = 'C Line';
                         break;
                     case '804':
-                        image.src = RAIL_ICONS['804'];
-                        image.alt = 'D Line';
+                        railIcon.src = RAIL_ICONS['804'];
+                        railIcon.alt = 'D Line';
                         break;
                     case '805':
-                        image.src = RAIL_ICONS['805'];
-                        image.alt = 'E Line';
+                        railIcon.src = RAIL_ICONS['805'];
+                        railIcon.alt = 'E Line';
                         break;
                     case '807':
-                        image.src = RAIL_ICONS['807'];
-                        image.alt = 'K Line';
+                        railIcon.src = RAIL_ICONS['807'];
+                        railIcon.alt = 'K Line';
                         break;
                 }
                 
-                icon.appendChild(image);
+                icon.appendChild(railIcon);
 
                 break;
             case SERVICE.BUS:
                 icon.classList.add("alert-item__icon--bus");
                 
+                let route_id = alert.alert.informed_entity[0].route_id;
+                let busRoute = splitLine(route_id);
+                icon.innerHTML = `<div>${busRoute}</div>`;
+
                 break;
             case SERVICE.ACCESS:
                 icon.classList.add("alert-item__icon--access");
+                let accessIcon = document.createElement("img");
+                accessIcon.src = 'img/elevator.svg';
+                accessIcon.alt = 'elevator icon';
+                icon.appendChild(accessIcon);
+
                 break;
         }
 
@@ -364,15 +382,6 @@ function updateView() {
 
     
 
-}
-
-function createBusBadge(route) {
-    let badge = document.createElement("div");
-    badge.classList.add("alert-item__icon");
-    badge.classList.add("alert-item__icon--bus");
-    badge.innerHTML = `<div>${route}</div>`;
-
-    return badge;
 }
 
 function displayAlerts() {
