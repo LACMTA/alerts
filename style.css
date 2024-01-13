@@ -44,6 +44,10 @@ h1 {
     border-color: #105EDA;
 }
 
+.service-nav__button--selected {
+    border-color: #105EDA;
+}
+
 
 #alert-list {
     margin: 0;

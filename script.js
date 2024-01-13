@@ -225,17 +225,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function handleServiceClick(e) {
+    document.querySelectorAll('.service-nav__button').forEach(
+        nav => nav.classList.remove('service-nav__button--selected')
+    );
+
     switch(this.toString()) {
         case SERVICE.RAIL:
             serviceSelected = SERVICE.RAIL;
+            document.querySelector('#service-nav--rail').classList.add('service-nav__button--selected');
+            
             console.log('rail clicked');
             break;
         case SERVICE.BUS:
             serviceSelected = SERVICE.BUS;
+            document.querySelector('#service-nav--bus').classList.add('service-nav__button--selected');
+
             console.log('bus clicked');
             break;
         case SERVICE.ACCESS:
             serviceSelected = SERVICE.ACCESS;
+            document.querySelector('#service-nav--access').classList.add('service-nav__button--selected');
+
             console.log('access clicked');
             break;
     }
@@ -244,17 +254,27 @@ function handleServiceClick(e) {
 }
 
 function handleStatusClick(e) {
+    document.querySelectorAll('.status-nav__button').forEach(
+        nav => nav.classList.remove('status-nav__button--selected')
+    );
+
     switch(this.toString()) {
         case STATUS.ALL:
             statusSelected = STATUS.ALL;
+            document.querySelector('#status-nav--all').classList.add('status-nav__button--selected');
+
             console.log('all clicked');
             break;
         case STATUS.ONGOING:
             statusSelected = STATUS.ONGOING;
+            document.querySelector('#status-nav--ongoing').classList.add('status-nav__button--selected');
+
             console.log('ongoing clicked');
             break;
         case STATUS.UPCOMING:
             statusSelected = STATUS.UPCOMING;
+            document.querySelector('#status-nav--upcoming').classList.add('status-nav__button--selected');
+            
             console.log('upcoming clicked');
             break;
     }
