@@ -1,29 +1,93 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            * {
-                font-family: 'Open Sans', sans-serif;
-            }
 
-            .line, .stop {
-                margin: 10px 20px;
-                padding: 10px;
-                border: solid 1px #ccc;
-            }
-            .alert {
-                margin: 10px;
-                padding: 10px;
-                border: solid 1px #ccc;
-            }
-        </style>
-    </head>
-    <body>
+<head>
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="https://use.typekit.net/goe1fni.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <h1>Alerts & Advisories</h1>
+
+        <div id="service-nav">
+            <div id="service-nav--rail" class="service-nav__button">
+                <div>
+                    <img src="img/Service_Rail.svg" alt="rail icon">
+                </div>
+                <div>
+                    <span>Rail</span>
+                </div>
+            </div>
+            <div id="service-nav--bus" class="service-nav__button">
+                <div>
+                    <img src="img/Service_Bus.svg" alt="bus icon">
+                </div>
+                <div>
+                    <span>Bus</span>
+                </div>
+            </div>
+            <div id="service-nav--access" class="service-nav__button">
+                <div>
+                    <img src="img/Service_Accessibility.svg" alt="accessibility icon">
+                </div>
+                <div>
+                    <span>Accessibility</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="alert-list">
+            <div id="status__nav">
+                <div id="status-nav--all" class="status-nav__button status-nav__button--selected">All</div>
+                <div id="status-nav--ongoing" class="status-nav__button">Ongoing</div>
+                <div id="status-nav--upcoming" class="status-nav__button">Upcoming</div>
+            </div>
+            <div id="alert-list__content">
+                <div class="alert-item">
+                    <div class="alert-item__icon alert-item__icon--rail">
+                        <img src="img/Service_CLine.svg" alt="rail icon">
+                    </div>
+                    <div class="alert-item__content">
+                        <div class="alert-item__title">Blue Line</div>
+                        <div class="alert-item__description">Due to construction, trains will run every 20 minutes
+                            between 7th St/Metro Center and Willowbrook/Rosa Parks Station. Trains will run every 10
+                            minutes between Willowbrook/Rosa Parks Station and Downtown Long Beach Station.</div>
+                    </div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-item__icon alert-item__icon--bus">
+                        <div>
+                            222
+                        </div>
+                    </div>
+                    <div class="alert-item__content">
+                        <div class="alert-item__title">Line 222</div>
+                        <div class="alert-item__description">Due to construction, trains will run every 20 minutes
+                            between 7th St/Metro Center and Willowbrook/Rosa Parks Station. Trains will run every 10
+                            minutes between Willowbrook/Rosa Parks Station and Downtown Long Beach Station.</div>
+                    </div>
+                    <div class="alert-item__status">
+                        <div class="alert-item__status--ongoing">
+                            Ongoing
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <div id="lastUpdated">Last Updated: <span></span></div>
 
         <div id="alerts"></div>
         <div id="access"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
 
-        <script src="script.js"></script>
-    </body>
 </html>
