@@ -131,8 +131,8 @@ h3 {
 .alert-item__icon--bus div {
     text-align: center;
     font-size: 48px;
-    font-family: "urw-din-condensed", sans-serif;
-    font-weight: 700;
+    font-family: "urw-din", sans-serif;
+    font-weight: 600;
     font-style: normal;
     border-radius: 8px;
     background-color: #E28B41;
