@@ -1,0 +1,143 @@
+html {
+    font-family: 'open-sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1.5rem;
+    color: #575757;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-weight: 700;
+    color: #000;
+}
+
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 3.5rem;
+    letter-spacing: -0.024rem;
+}
+
+h2 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    letter-spacing: -0.024rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+h4 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.subtitle_1 {
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+.subtitle_2 {
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+a {
+    font-family: 'open-sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #085EB4;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Component: Navigation Buttons */
+
+.nav-buttons {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.nav-buttons__button {
+    margin: 0;
+    padding: 12px;
+    flex: 1;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid #E4E4E7;
+    background: #FFF;
+    cursor: pointer;
+}
+
+.nav-buttons__button:hover {
+    border-color: #105EDA;
+}
+
+.nav-buttons__button--selected {
+    border-color: #105EDA;
+}
+
+.nav-buttons__button-text {
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    color: #000;
+}
+
+.nav-buttons__button div img {
+    width: 28px;
+}
+
+/* Component: Navigation Tabs */
+
+.nav-tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.nav-tabs__button {
+    margin: 0;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.nav-tabs__button-text {
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    color: #000;
+}
+
+.nav-tabs__button:hover {
+    background-color: #105EDA;
+    color: #fff;
+}
+
+.nav-tabs__button--selected {
+    color: #105EDA;
+    border-bottom: 2px solid #105EDA;
+}
