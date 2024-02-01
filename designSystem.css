@@ -105,7 +105,7 @@ a:hover, a:active {
 }
 
 .nav-buttons__button div img {
-    width: 64px;
+    width: 28px;
 }
 
 /* Component: Navigation Tabs */
@@ -113,7 +113,7 @@ a:hover, a:active {
 .nav-tabs {
     display: flex;
     flex-direction: row;
-    gap: 48px;
+    gap: 20px;
     font-weight: bold;
     margin: 12px 0;
 }

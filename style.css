@@ -9,8 +9,8 @@
 
 #alert-list {
     margin: 0;
-    padding: 24px 36px;
-    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -39,32 +39,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 72px;
+    
 }
 
 .alert-item__icon--rail img {
-    width: 60px;
+    width: 28px;
 }
 
 .alert-item__icon--bus div {
-    text-align: center;
-    font-size: 48px;
     font-family: "urw-din", sans-serif;
+    font-size: 1.5rem;    
     font-weight: 600;
     font-style: normal;
+    text-align: center;
+    line-height: 1.3rem;
     border-radius: 8px;
     background-color: #E28B41;
     color: #fff;
-    padding: 0 12px;
+    padding: 8px;
     /* width: 34px; */
 }
 
 .alert-item__icon--access div {
     text-align: center;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 32px;
     border-radius: 8px;
     background-color: #5BC2E7;
     color: #fff;
@@ -76,22 +73,25 @@
 }
 
 .alert-item__title {
+    font-family: 'ff-scala-sans-pro', sans-serif;
     font-weight: 700;
-    font-size: 32px;
-    line-height: 52px;
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
 .alert-item__description {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 28px;
-    line-height: 36px;
+    font-family: 'open-sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
     color: #595959;
 }
 
 .alert-item__status div {
-    padding: 16px;
-    font-weight: bold;
-    font-size: 28px;
+    font-family: 'ff-scala-sans-pro', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.6rem;
+    padding: 4px 6px;
     overflow: auto;
 }
 
