@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="designSystem.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
 
@@ -18,79 +19,48 @@
     <div class="content-wrapper">
         <h1>Alerts & Advisories</h1>
 
-        <div id="service-nav">
-            <div id="service-nav--rail" class="service-nav__button service-nav__button--selected">
+        <div id="service-nav" class="nav-buttons">
+            <div id="service-nav--rail" class="nav-buttons__button nav-buttons__button--selected">
                 <div>
                     <img src="img/Service_Rail.svg" alt="rail icon">
                 </div>
-                <div>
-                    <h2>Rail</h2>
+                <div class="nav-buttons__button-text">
+                    Rail
                 </div>
             </div>
-            <div id="service-nav--bus" class="service-nav__button">
+            <div id="service-nav--bus" class="nav-buttons__button">
                 <div>
                     <img src="img/Service_Bus.svg" alt="bus icon">
                 </div>
-                <div>
-                    <h2>Bus</h2>
+                <div class="nav-buttons__button-text">
+                    Bus
                 </div>
             </div>
-            <div id="service-nav--access" class="service-nav__button">
+            <div id="service-nav--access" class="nav-buttons__button">
                 <div>
                     <img src="img/Service_Accessibility.svg" alt="accessibility icon">
                 </div>
-                <div>
-                    <h2>Accessibility</h2>
+                <div class="nav-buttons__button-text">
+                    Accessibility
                 </div>
             </div>
         </div>
 
         <div id="alert-list">
-            <div id="status__nav">
-                <div id="status-nav--all" class="status-nav__button status-nav__button--selected">
-                    <h3>All</h3>
+            <div id="status__nav" class="nav-tabs">
+                <div id="status-nav--all" class="nav-tabs__button nav-tabs__button--selected">
+                    <div class="nav-tabs__button-text">All</div>
                 </div>
-                <div id="status-nav--ongoing" class="status-nav__button">
-                    <h3>Ongoing</h3>
+                <div id="status-nav--ongoing" class="nav-tabs__button">
+                    <div class="nav-tabs__button-text">Ongoing</div>
                 </div>
-                <div id="status-nav--upcoming" class="status-nav__button">
-                    <h3>Upcoming</h3>
+                <div id="status-nav--upcoming" class="nav-tabs__button">
+                    <div class="nav-tabs__button-text">Upcoming</div>
                 </div>
             </div>
             <div id="alert-list__content">
-                <!--<div class="alert-item">
-                    <div class="alert-item__icon alert-item__icon--rail">
-                        <img src="img/Service_CLine.svg" alt="rail icon">
-                    </div>
-                    <div class="alert-item__content">
-                        <div class="alert-item__title">Blue Line</div>
-                        <div class="alert-item__description">Due to construction, trains will run every 20 minutes
-                            between 7th St/Metro Center and Willowbrook/Rosa Parks Station. Trains will run every 10
-                            minutes between Willowbrook/Rosa Parks Station and Downtown Long Beach Station.</div>
-                    </div>
-                </div>
-                <div class="alert-item">
-                    <div class="alert-item__icon alert-item__icon--bus">
-                        <div>
-                            222
-                        </div>
-                    </div>
-                    <div class="alert-item__content">
-                        <div class="alert-item__title">Line 222</div>
-                        <div class="alert-item__description">Due to construction, trains will run every 20 minutes
-                            between 7th St/Metro Center and Willowbrook/Rosa Parks Station. Trains will run every 10
-                            minutes between Willowbrook/Rosa Parks Station and Downtown Long Beach Station.</div>
-                    </div>
-                    <div class="alert-item__status">
-                        <div class="alert-item__status--ongoing">
-                            Ongoing
-                        </div>
-                    </div>
-                </div>-->
             </div>
         </div>
-
-        <!--<div id="lastUpdated">Last Updated: <span></span></div>-->
 
         <div id="alerts"></div>
         <div id="access"></div>
