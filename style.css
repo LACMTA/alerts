@@ -1,11 +1,16 @@
-.content-wrapper {
-    margin: 0 auto;
-    /* max-width: 800px; */
-    padding: 10px 36px;
-
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
+.content-wrapper {
+    margin: 0 auto;
+    padding: 24px 34px;
+}
 
+.content-wrapper>div {
+    margin-bottom: 12px;
+}
 
 #alert-list {
     margin: 0;
@@ -19,20 +24,12 @@
     box-shadow: 0px 20px 25px 0px rgba(76, 103, 100, 0.10);
 }
 
-
-#alert-list__content  {
-}
-
 .alert-item {
     display: flex;
     flex-direction: row;
     padding: 24px 0;
     border-bottom: 1px solid #F3F3F3;
     gap: 12px;
-}
-
-.alert-item__icon {
-
 }
 
 .alert-item__icon--rail {
@@ -67,9 +64,6 @@
     color: #fff;
     padding: 0 8px;
     width: 34px;
-}
-
-.alert-item__content {
 }
 
 .alert-item__title {
