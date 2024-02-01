@@ -466,16 +466,3 @@ function updateView() {
     }
 
 }
-
-function sortAlertView(a, b) {
-    let aTime = convertDateTime(a.alert.active_period[0].start);
-    let bTime = convertDateTime(b.alert.active_period[0].start);
-
-    if (aTime < bTime) {
-        return -1;
-    } else if (aTime > bTime) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
