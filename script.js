@@ -94,15 +94,34 @@ function categorizeAndStoreAlert(route_id, alert, alertsArray) {
 
 function sortAlertsByEffectiveDate(alerts) {
     alerts.sort((a, b) => {
-        let aTime = convertDateTime(a.alert.active_period[0].start);
-        let bTime = convertDateTime(b.alert.active_period[0].start);
+        let aStartTime = convertDateTime(a.alert.active_period[0].start);
+        let bStartTime = convertDateTime(b.alert.active_period[0].start);
 
-        if (aTime < bTime) {
-            return -1;
-        } else if (aTime > bTime) {
-            return 1;
+        // check if end time exists
+        if (a.alert.active_period[0].end) {
+            if (b.alert.active_period[0].end) {
+                if (aStartTime < bStartTime) {
+                    return -1;
+                } else if (aStartTime > bStartTime) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return -1;
+            }
         } else {
-            return 0;
+            if (b.alert.active_period[0].end) {
+                return 1;
+            } else {
+                if (aStartTime < bStartTime) {
+                    return -1;
+                } else if (aStartTime > bStartTime) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
         }
     });
 }
@@ -403,6 +422,14 @@ function updateView() {
             let content_description = document.createElement('div');
             content_description.classList.add("alert-item__description");
             content_description.innerHTML = alert.alert.description_text.translation[0].text;
+
+            content_description.innerHTML += '<br><br>DEBUG:';
+            content_description.innerHTML += '<br>Start Date: ' + convertDateTime(alert.alert.active_period[0].start);
+            if (alert.alert.active_period[0].end) {
+                content_description.innerHTML += '<br>End Date: ' + convertDateTime(alert.alert.active_period[0].end);
+            } else {
+                content_description.innerHTML += '<br>End Date: No End Date';
+            }
 
             content.appendChild(content_title);
             content.appendChild(content_description);
