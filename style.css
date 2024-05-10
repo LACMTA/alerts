@@ -57,13 +57,17 @@ html, body {
     /* width: 34px; */
 }
 
-.alert-item__icon--access div {
+.alert-item__icon--access>div {
     text-align: center;
     border-radius: 8px;
     background-color: #5BC2E7;
     color: #fff;
-    padding: 0 8px;
+    padding: 4px;
     width: 34px;
+}
+
+.alert-item__icon--access img {
+    max-width: 100%;
 }
 
 .alert-item__title {
