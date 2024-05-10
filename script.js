@@ -1,5 +1,8 @@
 const BUS_AGENCY_ID = 'LACMTA';
 const RAIL_AGENCY_ID = 'LACMTA_Rail';
+const DATA_SOURCE = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
+
+const DEV_DATA_SOURCE = 'alerts_enhanced.json';
 
 const SERVICE = {
     'RAIL': 'rail',
@@ -20,7 +23,15 @@ const RAIL_ICONS = {
     '804': 'https://lacmta.github.io/metro-iconography/Service_ELine.svg',
     '805': 'https://lacmta.github.io/metro-iconography/Service_DLine.svg',
     '807': 'https://lacmta.github.io/metro-iconography/Service_KLine.svg'
-}
+};
+
+const BUS_ICONS = {
+    '901': 'https://lacmta.github.io/metro-iconography/Service_GLine.svg',
+    '910': 'https://lacmta.github.io/metro-iconography/Service_JLine.svg',
+    '950': 'https://lacmta.github.io/metro-iconography/Service_JLine.svg'
+};
+
+const ACCESS_ICON = 'img/elevator.svg';
 
 let serviceSelected = SERVICE.RAIL;
 let statusSelected = STATUS.ALL;
@@ -44,7 +55,7 @@ let accessAlerts = {
     'upcoming': []
 };
 
-fetch('https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/')
+fetch(DEV_DATA_SOURCE)
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -146,6 +157,18 @@ function combineAlerts(alerts) {
     }
 }
 
+function combineAccessAlerts(alerts) {
+    let target = alerts['all'];
+
+    for (let item in alerts['ongoing']) {
+        target = target.concat(alerts['ongoing'][item]);
+    }
+
+    for (let item in alerts['upcoming']) {
+        target = target.concat(alerts['upcoming'][item]);
+    }
+}
+
 function processAlerts(data) {
     // Add Ongoing and Upcoming Alerts
     data.forEach(alert => {
@@ -159,24 +182,18 @@ function processAlerts(data) {
             // to determine what kind of alert this is (bus, rail, or accessibility)
             // Return after the first entity which determines this.
             alert.alert.informed_entity.some((entity, i) => {
-                // Check if route_id doesn't exist
-                if (!entity.route_id) {
-                    // Check if stop_id exists - this is an ACCESS ALERT
-                    if (entity.stop_id) {
-                        accessAlerts.all.push(alert);
+                // ACCESS ALERT
+                // Check if facility_id exists
+                if (entity.facility_id) {
+                    accessAlerts.all.push(alert);
 
-                        if (isUpcoming(alert)) {
-                            accessAlerts.upcoming.push(alert);
-                        } else {
-                            accessAlerts.ongoing.push(alert);
-                        }
-                        return true;
+                    if (isUpcoming(alert)) {
+                        accessAlerts.upcoming.push(alert);
                     } else {
-                        console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has no route_id or stop_id`);
-                        console.log(alert);
-                        return true;
+                        accessAlerts.ongoing.push(alert);
                     }
-                } else { // route_id exists so this is a bus or rail alert
+                    return true;
+                } else { // BUS/RAIL ALERT - route_id exists
                     // Check if this is bus or rail
                     if (!entity.agency_id) {
 
@@ -207,7 +224,7 @@ function processAlerts(data) {
     // Combine Ongoing and Upcoming Alerts, grouped by route_id
     combineAlerts(railAlerts);
     combineAlerts(busAlerts);
-    combineAlerts(accessAlerts);
+    combineAccessAlerts(accessAlerts);
 
     console.log(alertsByLine);
 
@@ -314,33 +331,20 @@ function handleStatusClick(e) {
     updateView();
 }
 
-
-function updateView() {
-    let filteredAlerts = [];
-
-    switch (serviceSelected) {
-        case SERVICE.RAIL:
-            filteredAlerts = railAlerts[statusSelected];
-            break;
-        case SERVICE.BUS:
-            filteredAlerts = busAlerts[statusSelected];
-            break;
-        case SERVICE.ACCESS:
-            filteredAlerts = accessAlerts[statusSelected];
-            break;
-    }
-
+function updateAccessView() {
+    let filteredAlerts = accessAlerts[statusSelected];
     let alertList = document.querySelector("#alert-list__content");
     alertList.innerHTML = '';
 
-    // Loop through each key in the filteredAlerts object
-    for (let route in filteredAlerts) {
-        // Sort the alerts for this route.
-        sortAlertsByEffectiveDate(filteredAlerts[route]);
-
-        // Display the alerts for this route.
-        filteredAlerts[route].forEach(alert => {
-            let isAccessAlert = false;
+    if (Object.keys(filteredAlerts).length == 0) {
+        let noAlerts = document.createElement("div");
+        noAlerts.classList.add("alert-item");
+        noAlerts.innerHTML = "No alerts found.";
+        alertList.appendChild(noAlerts);
+    } else {
+        for (let item in filteredAlerts) {
+            console.log(item);
+            let alert = filteredAlerts[item];
 
             // Create alert-item element
             let newAlert = document.createElement("div");
@@ -350,68 +354,17 @@ function updateView() {
             // Create icon element
             let icon = document.createElement("div");
             icon.classList.add("alert-item__icon");
+            icon.classList.add("alert-item__icon--access");
 
-            // Determine which service to generate a display for
-            switch (serviceSelected) {
-                case SERVICE.RAIL:
-                    icon.classList.add("alert-item__icon--rail");
+            let accessIconDiv = document.createElement("div");
+            let accessIcon = document.createElement("img");
 
-                    let railRoute = splitLine(route);
-                    let railIcon = document.createElement("img");
+            accessIcon.src = 'img/elevator.svg';
+            accessIcon.alt = 'elevator icon';
 
-                    switch (railRoute) {
-                        case '801':
-                            railIcon.src = RAIL_ICONS['801'];
-                            railIcon.alt = 'A Line';
-                            break;
-                        case '802':
-                            railIcon.src = RAIL_ICONS['802'];
-                            railIcon.alt = 'B Line';
-                            break;
-                        case '803':
-                            railIcon.src = RAIL_ICONS['803'];
-                            railIcon.alt = 'C Line';
-                            break;
-                        case '804':
-                            railIcon.src = RAIL_ICONS['804'];
-                            railIcon.alt = 'D Line';
-                            break;
-                        case '805':
-                            railIcon.src = RAIL_ICONS['805'];
-                            railIcon.alt = 'E Line';
-                            break;
-                        case '807':
-                            railIcon.src = RAIL_ICONS['807'];
-                            railIcon.alt = 'K Line';
-                            break;
-                    }
+            accessIconDiv.appendChild(accessIcon);
+            icon.appendChild(accessIconDiv);
 
-                    icon.appendChild(railIcon);
-
-                    break;
-                case SERVICE.BUS:
-                    icon.classList.add("alert-item__icon--bus");
-
-                    icon.innerHTML = `<div>${route}</div>`;
-
-                    break;
-                case SERVICE.ACCESS:
-                    isAccessAlert = true;
-                    icon.classList.add("alert-item__icon--access");
-
-                    let accessIconDiv = document.createElement("div");
-                    let accessIcon = document.createElement("img");
-
-                    accessIcon.src = 'img/elevator.svg';
-                    accessIcon.alt = 'elevator icon';
-
-                    accessIconDiv.appendChild(accessIcon);
-                    icon.appendChild(accessIconDiv);
-
-                    break;
-            }
-
-            // Create description content
             let content = document.createElement("div");
             content.classList.add("alert-item__content");
 
@@ -456,13 +409,191 @@ function updateView() {
             newAlert.appendChild(status);
 
             alertList.appendChild(newAlert);
-            if (isAccessAlert) {
-                return false;
-            } else {
-                return true;
-            }
-        });
+        }
+    }
+}
 
+
+function updateView() {
+    let filteredAlerts = [];
+
+    switch (serviceSelected) {
+        case SERVICE.RAIL:
+            filteredAlerts = railAlerts[statusSelected];
+            break;
+        case SERVICE.BUS:
+            filteredAlerts = busAlerts[statusSelected];
+            break;
+        case SERVICE.ACCESS:
+            updateAccessView();
+            return;
+    }
+
+    let alertList = document.querySelector("#alert-list__content");
+    alertList.innerHTML = '';
+
+    if (Object.keys(filteredAlerts).length == 0) {
+        let noAlerts = document.createElement("div");
+        noAlerts.classList.add("alert-item");
+        noAlerts.innerHTML = "No alerts found.";
+        alertList.appendChild(noAlerts);
+    } else {
+        // Loop through each key in the filteredAlerts object
+        for (let item in filteredAlerts) {
+            // Sort the alerts for this route.
+            sortAlertsByEffectiveDate(filteredAlerts[item]);
+
+            // Display the alerts for this route.
+            filteredAlerts[item].forEach(alert => {
+                let isAccessAlert = false;
+
+                // Create alert-item element
+                let newAlert = document.createElement("div");
+                newAlert.classList.add("alert-item");
+                newAlert.id = "alert_id_" + alert.id;
+
+                // Create icon element
+                let icon = document.createElement("div");
+                icon.classList.add("alert-item__icon");
+
+                // Determine which service to generate a display for
+                switch (serviceSelected) {
+                    case SERVICE.RAIL:
+                        icon.classList.add("alert-item__icon--rail");
+
+                        let railRoute = splitLine(item);
+                        let railIcon = document.createElement("img");
+
+                        switch (railRoute) {
+                            case '801':
+                                railIcon.src = RAIL_ICONS['801'];
+                                railIcon.alt = 'A Line';
+                                break;
+                            case '802':
+                                railIcon.src = RAIL_ICONS['802'];
+                                railIcon.alt = 'B Line';
+                                break;
+                            case '803':
+                                railIcon.src = RAIL_ICONS['803'];
+                                railIcon.alt = 'C Line';
+                                break;
+                            case '804':
+                                railIcon.src = RAIL_ICONS['804'];
+                                railIcon.alt = 'D Line';
+                                break;
+                            case '805':
+                                railIcon.src = RAIL_ICONS['805'];
+                                railIcon.alt = 'E Line';
+                                break;
+                            case '807':
+                                railIcon.src = RAIL_ICONS['807'];
+                                railIcon.alt = 'K Line';
+                                break;
+                        }
+
+                        icon.appendChild(railIcon);
+
+                        break;
+                    case SERVICE.BUS:
+                        let busRoute = splitLine(item);
+                        let busIcon = document.createElement("img");
+
+                        switch (busRoute) {
+                            case '901':
+                                busIcon.src = BUS_ICONS['901'];
+                                busIcon.alt = 'G Line';
+                                icon.classList.add("alert-item__icon--bus-icon");
+                                icon.appendChild(busIcon);
+                                break;
+                            case '910':
+                                busIcon.src = BUS_ICONS['910'];
+                                busIcon.alt = 'J Line';
+                                icon.classList.add("alert-item__icon--bus-icon");
+                                icon.appendChild(busIcon);
+                                break;
+                            case '950':
+                                busIcon.src = BUS_ICONS['950'];
+                                busIcon.alt = 'J Line';
+                                icon.classList.add("alert-item__icon--bus-icon");
+                                icon.appendChild(busIcon);
+                                break;
+                            default:
+                                icon.classList.add("alert-item__icon--bus");
+                        }
+
+                        icon.innerHTML = `<div>${item}</div>`;
+
+                        break;
+                    case SERVICE.ACCESS:
+                        isAccessAlert = true;
+                        icon.classList.add("alert-item__icon--access");
+
+                        let accessIconDiv = document.createElement("div");
+                        let accessIcon = document.createElement("img");
+
+                        accessIcon.src = 'img/elevator.svg';
+                        accessIcon.alt = 'elevator icon';
+
+                        accessIconDiv.appendChild(accessIcon);
+                        icon.appendChild(accessIconDiv);
+
+                        break;
+                }
+
+                // Create description content
+                let content = document.createElement("div");
+                content.classList.add("alert-item__content");
+
+                let content_title = document.createElement('div');
+                content_title.classList.add("alert-item__title");
+                content_title.innerHTML = alert.alert.header_text.translation[0].text;
+
+                let content_description = document.createElement('div');
+                content_description.classList.add("alert-item__description");
+                content_description.innerHTML = alert.alert.description_text.translation[0].text;
+
+                content_description.innerHTML += '<br><br>DEBUG:';
+                content_description.innerHTML += '<br>Start Date: ' + convertDateTime(alert.alert.active_period[0].start);
+                if (alert.alert.active_period[0].end) {
+                    content_description.innerHTML += '<br>End Date: ' + convertDateTime(alert.alert.active_period[0].end);
+                } else {
+                    content_description.innerHTML += '<br>End Date: No End Date';
+                }
+
+                content.appendChild(content_title);
+                content.appendChild(content_description);
+
+                // Create status
+                let status = document.createElement('div');
+                status.classList.add("alert-item__status");
+
+                let status_badge = document.createElement('div');
+
+                if (isUpcoming(alert)) {
+                    status_badge.classList.add("alert-item__status--upcoming");
+                    status_badge.innerHTML = 'Upcoming';
+                } else {
+                    status_badge.classList.add("alert-item__status--ongoing");
+                    status_badge.innerHTML = 'Ongoing';
+                }
+
+                status.appendChild(status_badge);
+
+                // Add to page
+                newAlert.appendChild(icon);
+                newAlert.appendChild(content);
+                newAlert.appendChild(status);
+
+                alertList.appendChild(newAlert);
+                
+                if (isAccessAlert) {
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
+        }
     }
 
 }
