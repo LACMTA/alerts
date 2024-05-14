@@ -13,12 +13,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="designSystem.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+
+    <script>
+        // Helper function
+        let domReady = (cb) => {
+          document.readyState === 'interactive' || document.readyState === 'complete'
+            ? cb()
+            : document.addEventListener('DOMContentLoaded', cb);
+        };
+    
+        domReady(() => {
+          // Display body when DOM is loaded
+          document.body.style.visibility = 'visible';
+        });
+      </script>
 </head>
 
-<body>
+<body style="visibility: hidden;">
     <div class="content-wrapper">
         <div class="pageTitle">
             <h1>Alerts & Advisories</h1>
+            <span class="h3">Filter by service:</span>
         </div>
 
         <div id="service-nav" class="nav-buttons">
@@ -40,10 +55,10 @@
             </div>
             <div id="service-nav--access" class="nav-buttons__button">
                 <div>
-                    <img src="img/Service_Accessibility.svg" alt="accessibility icon">
+                    <img src="img/elevator.svg" alt="accessibility icon">
                 </div>
                 <div class="nav-buttons__button-text">
-                    Accessibility
+                    Elevators
                 </div>
             </div>
         </div>
