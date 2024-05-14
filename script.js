@@ -64,12 +64,22 @@ fetch(DEV_DATA_SOURCE)
     });
 
 function updateLastUpdated(time) {
-    result = convertDateTime(time).toLocaleString();
+    // result = convertDateTime(time).toLocaleString();
+    result = new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+    }).format(time);
     document.querySelector("#lastUpdated span").innerHTML = result;
 }
 
 function convertDateTime(time) {
-    result = new Date(time * 1000);
+    // result = new Date(time * 1000);
+
+    result = new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+    }).format(time * 1000);
+
     return result;
 }
 
@@ -376,12 +386,11 @@ function updateAccessView() {
             content_description.classList.add("alert-item__description");
             content_description.innerHTML = alert.alert.description_text.translation[0].text;
 
-            content_description.innerHTML += '<br><br>DEBUG:';
-            content_description.innerHTML += '<br>Start Date: ' + convertDateTime(alert.alert.active_period[0].start);
+            content_description.innerHTML += '<br><br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
             if (alert.alert.active_period[0].end) {
-                content_description.innerHTML += '<br>End Date: ' + convertDateTime(alert.alert.active_period[0].end);
+                content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
             } else {
-                content_description.innerHTML += '<br>End Date: No End Date';
+                content_description.innerHTML += '<br>No end date scheduled yet.';
             }
 
             content.appendChild(content_title);
@@ -491,6 +500,8 @@ function updateView() {
                                 break;
                         }
 
+                        railIcon.setAttribute('width', '32');
+
                         icon.appendChild(railIcon);
 
                         break;
@@ -533,6 +544,7 @@ function updateView() {
 
                         accessIcon.src = 'img/elevator.svg';
                         accessIcon.alt = 'elevator icon';
+                        accessIcon.setAttribute('width', '32');
 
                         accessIconDiv.appendChild(accessIcon);
                         icon.appendChild(accessIconDiv);
@@ -552,12 +564,11 @@ function updateView() {
                 content_description.classList.add("alert-item__description");
                 content_description.innerHTML = alert.alert.description_text.translation[0].text;
 
-                content_description.innerHTML += '<br><br>DEBUG:';
-                content_description.innerHTML += '<br>Start Date: ' + convertDateTime(alert.alert.active_period[0].start);
+                content_description.innerHTML += '<br><br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
                 if (alert.alert.active_period[0].end) {
-                    content_description.innerHTML += '<br>End Date: ' + convertDateTime(alert.alert.active_period[0].end);
+                    content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
                 } else {
-                    content_description.innerHTML += '<br>End Date: No End Date';
+                    content_description.innerHTML += '<br>No end date scheduled yet.';
                 }
 
                 content.appendChild(content_title);

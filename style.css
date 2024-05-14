@@ -40,7 +40,7 @@ html, body {
 }
 
 .alert-item__icon--rail img {
-    width: 28px;
+    width: 32px;
 }
 
 .alert-item__icon--bus div {
@@ -57,17 +57,22 @@ html, body {
     /* width: 34px; */
 }
 
-.alert-item__icon--access>div {
+.alert-item__icon--access div {
     text-align: center;
     border-radius: 8px;
     background-color: #5BC2E7;
     color: #fff;
     padding: 4px;
-    width: 34px;
+    width: 32px;
+    display: flex;
 }
 
 .alert-item__icon--access img {
     max-width: 100%;
+}
+
+.alert-item__content {
+    flex: 1;
 }
 
 .alert-item__title {
