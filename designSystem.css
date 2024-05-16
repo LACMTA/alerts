@@ -85,13 +85,13 @@ a:hover, a:active {
     flex-direction: column;
     gap: 8px;
     border-radius: 12px;
-    border: 1px solid #E4E4E7;
+    outline: 1px solid #E4E4E7;
     background: #FFF;
     cursor: pointer;
 }
 
 .nav-buttons__button:hover, .nav-buttons__button--selected {
-    border: 4px solid #105EDA;
+    outline: 4px solid #105EDA;
 }
 
 
