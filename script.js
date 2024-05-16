@@ -31,7 +31,7 @@ const BUS_ICONS = {
     '950': 'https://lacmta.github.io/metro-iconography/Service_JLine.svg'
 };
 
-const ACCESS_ICON = 'img/elevator.svg';
+const ACCESS_ICON = 'img/elevator-white.svg';
 
 let serviceSelected = SERVICE.RAIL;
 let statusSelected = STATUS.ALL;
@@ -369,7 +369,7 @@ function updateAccessView() {
             let accessIconDiv = document.createElement("div");
             let accessIcon = document.createElement("img");
 
-            accessIcon.src = 'img/elevator.svg';
+            accessIcon.src = 'img/elevator-white.svg';
             accessIcon.alt = 'elevator icon';
 
             accessIconDiv.appendChild(accessIcon);
@@ -542,7 +542,7 @@ function updateView() {
                         let accessIconDiv = document.createElement("div");
                         let accessIcon = document.createElement("img");
 
-                        accessIcon.src = 'img/elevator.svg';
+                        accessIcon.src = 'img/elevator-white.svg';
                         accessIcon.alt = 'elevator icon';
                         accessIcon.setAttribute('width', '32');
 
