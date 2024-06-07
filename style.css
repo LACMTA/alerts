@@ -98,7 +98,7 @@ html, body {
     overflow: auto;
 }
 
-.alert-item__status--ongoing {
+.alert-item__status--current {
     border-radius: 4px;
     background: rgba(94, 171, 113, 0.12);
     color: #5EAB71;

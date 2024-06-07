@@ -12,7 +12,7 @@ const SERVICE = {
 
 const STATUS = {
     'ALL': 'all',
-    'ONGOING': 'ongoing',
+    'CURRENT': 'current',
     'UPCOMING': 'upcoming'
 };
 
@@ -41,21 +41,21 @@ let alertsByLine = {};
 
 let railAlerts = {
     'all': [],
-    'ongoing': {},
+    'current': {},
     'upcoming': {}
 };
 let busAlerts = {
     'all': [],
-    'ongoing': {},
+    'current': {},
     'upcoming': {}
 };
 let accessAlerts = {
     'all': [],
-    'ongoing': [],
+    'current': [],
     'upcoming': []
 };
 
-fetch(DEV_DATA_SOURCE)
+fetch(DATA_SOURCE)
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -104,7 +104,7 @@ function createAlertObjectArray(alert) {
 }
 
 function categorizeAndStoreAlert(route_id, alert, alertsArray) {
-    let alertStatus = isUpcoming(alert) ? 'upcoming' : 'ongoing';
+    let alertStatus = isUpcoming(alert) ? 'upcoming' : 'current';
 
     if (alertsArray[alertStatus][route_id] == undefined) {
         alertsArray[alertStatus][route_id] = [];
@@ -150,12 +150,12 @@ function sortAlertsByEffectiveDate(alerts) {
 function combineAlerts(alerts) {
     let target = alerts['all'];
 
-    for (let route in alerts['ongoing']) {
+    for (let route in alerts['current']) {
         if (target[route] == undefined) {
             target[route] = [];
         }
 
-        target[route] = target[route].concat(alerts['ongoing'][route]);
+        target[route] = target[route].concat(alerts['current'][route]);
     }
 
     for (let route in alerts['upcoming']) {
@@ -170,8 +170,8 @@ function combineAlerts(alerts) {
 function combineAccessAlerts(alerts) {
     let target = alerts['all'];
 
-    for (let item in alerts['ongoing']) {
-        target = target.concat(alerts['ongoing'][item]);
+    for (let item in alerts['current']) {
+        target = target.concat(alerts['current'][item]);
     }
 
     for (let item in alerts['upcoming']) {
@@ -180,7 +180,7 @@ function combineAccessAlerts(alerts) {
 }
 
 function processAlerts(data) {
-    // Add Ongoing and Upcoming Alerts
+    // Add Current and Upcoming Alerts
     data.forEach(alert => {
         // Check if informed_entity exists and is not empty
         if (!alert.alert.informed_entity) {
@@ -200,7 +200,7 @@ function processAlerts(data) {
                     if (isUpcoming(alert)) {
                         accessAlerts.upcoming.push(alert);
                     } else {
-                        accessAlerts.ongoing.push(alert);
+                        accessAlerts.current.push(alert);
                     }
                     return true;
                 } else { // BUS/RAIL ALERT - route_id exists
@@ -231,7 +231,7 @@ function processAlerts(data) {
         }
     });
 
-    // Combine Ongoing and Upcoming Alerts, grouped by route_id
+    // Combine Current and Upcoming Alerts, grouped by route_id
     combineAlerts(railAlerts);
     combineAlerts(busAlerts);
     combineAccessAlerts(accessAlerts);
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add event listeners to status navigation buttons
     document.querySelector('#status-nav--all').addEventListener('click', handleStatusClick.bind(STATUS.ALL));
-    document.querySelector('#status-nav--ongoing').addEventListener('click', handleStatusClick.bind(STATUS.ONGOING));
+    document.querySelector('#status-nav--current').addEventListener('click', handleStatusClick.bind(STATUS.CURRENT));
     document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
 
     // updateView();
@@ -324,11 +324,11 @@ function handleStatusClick(e) {
 
             console.log('all clicked');
             break;
-        case STATUS.ONGOING:
-            statusSelected = STATUS.ONGOING;
-            document.querySelector('#status-nav--ongoing').classList.add('nav-tabs__button--selected');
+        case STATUS.CURRENT:
+            statusSelected = STATUS.CURRENT;
+            document.querySelector('#status-nav--current').classList.add('nav-tabs__button--selected');
 
-            console.log('ongoing clicked');
+            console.log('current clicked');
             break;
         case STATUS.UPCOMING:
             statusSelected = STATUS.UPCOMING;
@@ -406,8 +406,8 @@ function updateAccessView() {
                 status_badge.classList.add("alert-item__status--upcoming");
                 status_badge.innerHTML = 'Upcoming';
             } else {
-                status_badge.classList.add("alert-item__status--ongoing");
-                status_badge.innerHTML = 'Ongoing';
+                status_badge.classList.add("alert-item__status--current");
+                status_badge.innerHTML = 'Current';
             }
 
             status.appendChild(status_badge);
@@ -584,8 +584,8 @@ function updateView() {
                     status_badge.classList.add("alert-item__status--upcoming");
                     status_badge.innerHTML = 'Upcoming';
                 } else {
-                    status_badge.classList.add("alert-item__status--ongoing");
-                    status_badge.innerHTML = 'Ongoing';
+                    status_badge.classList.add("alert-item__status--current");
+                    status_badge.innerHTML = 'Current';
                 }
 
                 status.appendChild(status_badge);
