@@ -277,14 +277,34 @@ function isUpcoming(alert) {
 
 document.addEventListener("DOMContentLoaded", () => {
     // Add event listeners to service navigation buttons
-    document.querySelector('#service-nav--rail').addEventListener('click', handleServiceClick.bind(SERVICE.RAIL));
-    document.querySelector('#service-nav--bus').addEventListener('click', handleServiceClick.bind(SERVICE.BUS));
-    document.querySelector('#service-nav--access').addEventListener('click', handleServiceClick.bind(SERVICE.ACCESS));
+
+    // check if #service-nav--rail element exists
+    if (document.querySelector('#service-nav--rail')) {
+        document.querySelector('#service-nav--rail').addEventListener('click', handleServiceClick.bind(SERVICE.RAIL));
+    }
+    
+    if (document.querySelector('#service-nav--bus')) {
+        document.querySelector('#service-nav--bus').addEventListener('click', handleServiceClick.bind(SERVICE.BUS));
+    }
+
+    if (document.querySelector('#service-nav--access')) {
+        document.querySelector('#service-nav--access').addEventListener('click', handleServiceClick.bind(SERVICE.ACCESS));
+    }
+    
 
     // Add event listeners to status navigation buttons
-    document.querySelector('#status-nav--all').addEventListener('click', handleStatusClick.bind(STATUS.ALL));
-    document.querySelector('#status-nav--current').addEventListener('click', handleStatusClick.bind(STATUS.CURRENT));
-    document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
+    if (document.querySelector('#status-nav--all')) {
+        document.querySelector('#status-nav--all').addEventListener('click', handleStatusClick.bind(STATUS.ALL));
+    }
+    
+    if (document.querySelector('#status-nav--current')) {
+        document.querySelector('#status-nav--current').addEventListener('click', handleStatusClick.bind(STATUS.CURRENT));
+    }
+    
+    if (document.querySelector('#status-nav--upcoming')) {
+        document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
+    }
+    
 
     // updateView();
 });
