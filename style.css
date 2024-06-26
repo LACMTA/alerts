@@ -121,3 +121,47 @@ html, body {
 
 @media only screen and (min-width: 1025px) { /* big landscape tablets, laptops, and desktops */ 
 }
+
+
+/* HEADER & FOOTER STYLING */
+.header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+    padding: 0 0 0.25rem 0.5rem;
+    width: 100%;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.46rem;
+    line-height: 1.1;
+    padding: 0 2rem;
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: none;
+    height: auto;
+}
+
+.usa-footer, .usa-footer__secondary-section {
+    color: #fff;
+    background-color: #000;
+    overflow: visible;
+  }
+  
+  .usa-footer__secondary-section a {
+    color: #fff;
+  }

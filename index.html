@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/uswds/css/styles.css">
     <link href="designSystem.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 
@@ -30,6 +31,16 @@
 </head>
 
 <body style="visibility: hidden;">
+    <header class="usa-header usa-header--basic">
+        <div class="nav-container">
+            <div class="navbar">
+                <div class="logo" id="-logo">
+                    <img src="/img/metro_logo_white.svg" role="img"
+                            alt="Metro logo" />
+                </div>
+            </div>
+        </div>
+    </header>
     <div class="content-wrapper">
         <div class="pageTitle">
             <h1>Alerts & Advisories</h1>
@@ -82,6 +93,46 @@
         <div id="alerts"></div>
         <div id="access"></div>
     </div>
+
+    <footer class="usa-footer">
+        <div class="usa-footer__secondary-section">
+          <div class="grid-container">
+            <div class="grid-row grid-gap">
+              <div class="usa-footer__logo grid-row tablet:grid-col-5 tablet:grid-gap-2">
+                <div class="grid-col-4 tablet:grid-col-12">
+                  <img src="/img/metro_logo_white.svg" role="img" alt="Metro logo">
+                </div>
+                <div class="usa-footer__social-links grid-col-8 tablet:grid-col-12 grid-row grid-gap-1 display-flex flex-row flex-justify-end tablet:flex-justify-start">
+                  <div class="grid-col-auto">
+                    <a class="usa-social-link" href="https://twitter.com/metrolosangeles"><img class="usa-social-link__icon" src="https://lacmta.github.io/metro-iconography/SocialContact_icon_twitter_b-on-w.svg" alt="Twitter"></a>
+                  </div>
+                  <div class="grid-col-auto">
+                    <a class="usa-social-link" href="https://www.facebook.com/losangelesmetro"><img class="usa-social-link__icon" src="https://lacmta.github.io/metro-iconography/SocialContact_icon_facebook_b-on-w.svg" alt="Facebook"></a>
+                  </div>
+                  <div class="grid-col-auto">
+                    <a class="usa-social-link" href="https://www.instagram.com/metrolosangeles/"><img class="usa-social-link__icon" src="https://lacmta.github.io/metro-iconography/SocialContact_icon_instagram_b-on-w.svg" alt="Instagram"></a>
+                  </div>
+                  <div class="grid-col-auto">
+                    <a class="usa-social-link" href="https://www.linkedin.com/company/los-angeles-county-metropolitan-transportation-authority/"><img class="usa-social-link__icon" src="https://lacmta.github.io/metro-iconography/SocialContact_icon_linkedin_b-on-w.svg" alt="LinkedIn"></a>
+                  </div>
+                </div>
+              </div>
+              <div class="usa-footer__contact-links tablet:grid-col-7">
+                
+                <div class="margin-y-3 grid-row display-flex flex-row flex-justify-end grid-gap-2">
+                  <a href="https://www.metro.net/about/privacy-policy/" class="grid-col-auto">Privacy Policy</a>
+                  <a href="https://www.metro.net/about/copyright/" class="grid-col-auto">Terms of Use</a>
+                  <a href="https://www.metro.net/about/contacts/" class="grid-col-auto">Contact Us</a>
+                </div>
+                <div>
+                  This website was designed and developed with love to make Metro's digital tools more equitable, accessible and easy to use.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
     <script src="script.js"></script>
 </body>
 
