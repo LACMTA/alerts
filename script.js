@@ -118,32 +118,57 @@ function sortAlertsByEffectiveDate(alerts) {
         let aStartTime = new Date(convertDateTime(a.alert.active_period[0].start));
         let bStartTime = new Date(convertDateTime(b.alert.active_period[0].start));
 
-        // check if end time exists
-        if (a.alert.active_period[0].end) {
-            if (b.alert.active_period[0].end) {
-                if (aStartTime < bStartTime) {
+        // sort by start time, then by end time (if exists)
+        if (aStartTime < bStartTime) {
+            if (a.alert.active_period[0].end && b.alert.active_period[0].end) {
+                let aEndTime = new Date(convertDateTime(a.alert.active_period[0].end));
+                let bEndTime = new Date(convertDateTime(b.alert.active_period[0].end));
+                
+                if (aEndTime < bEndTime) {
                     return -1;
-                } else if (aStartTime > bStartTime) {
+                } else if (aEndTime > bEndTime) {
                     return 1;
                 } else {
                     return 0;
                 }
-            } else {
+            } else if (a.alert.active_period[0].end) {
                 return -1;
-            }
-        } else {
-            if (b.alert.active_period[0].end) {
-                return 1;
             } else {
-                if (aStartTime < bStartTime) {
-                    return -1;
-                } else if (aStartTime > bStartTime) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return 1;
             }
+        } else if (aStartTime > bStartTime) {
+            return 1;
+        } else {
+            return 0;
         }
+
+
+        // check if end time exists
+        // if (a.alert.active_period[0].end) {
+        //     if (b.alert.active_period[0].end) {
+        //         if (aStartTime < bStartTime) {
+        //             return -1;
+        //         } else if (aStartTime > bStartTime) {
+        //             return 1;
+        //         } else {
+        //             return 0;
+        //         }
+        //     } else {
+        //         return -1;
+        //     }
+        // } else {
+        //     if (b.alert.active_period[0].end) {
+        //         return 1;
+        //     } else {
+        //         if (aStartTime < bStartTime) {
+        //             return -1;
+        //         } else if (aStartTime > bStartTime) {
+        //             return 1;
+        //         } else {
+        //             return 0;
+        //         }
+        //     }
+        // }
     });
 }
 
