@@ -271,8 +271,9 @@ function splitStop(stop) {
 
 function isUpcoming(alert) {
     let today = new Date();
-    let startTime = convertDateTime(alert.alert.active_period[0].start);
-    return today < startTime;
+    let startTime = new Date(convertDateTime(alert.alert.active_period[0].start));
+    let status = today < startTime
+    return status;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
