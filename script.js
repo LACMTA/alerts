@@ -34,7 +34,7 @@ const BUS_ICONS = {
 const ACCESS_ICON = 'img/elevator-white.svg';
 
 let serviceSelected = SERVICE.RAIL;
-let statusSelected = STATUS.ALL;
+let statusSelected = STATUS.CURRENT;
 
 let alertsByLine = {};
 // let alertsByStop = {};
@@ -115,8 +115,8 @@ function categorizeAndStoreAlert(route_id, alert, alertsArray) {
 
 function sortAlertsByEffectiveDate(alerts) {
     alerts.sort((a, b) => {
-        let aStartTime = convertDateTime(a.alert.active_period[0].start);
-        let bStartTime = convertDateTime(b.alert.active_period[0].start);
+        let aStartTime = new Date(convertDateTime(a.alert.active_period[0].start));
+        let bStartTime = new Date(convertDateTime(b.alert.active_period[0].start));
 
         // check if end time exists
         if (a.alert.active_period[0].end) {
@@ -306,7 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
     }
     
-
     // updateView();
 });
 
