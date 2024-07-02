@@ -1,8 +1,11 @@
 const BUS_AGENCY_ID = 'LACMTA';
 const RAIL_AGENCY_ID = 'LACMTA_Rail';
-const DATA_SOURCE = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
 
-const DEV_DATA_SOURCE = 'alerts_enhanced.json';
+const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
+const DATA_SOURCE_TEST = 'alerts_enhanced.json';
+const DATA_SOURCE_EMPTY = 'alerts_empty.json';
+
+const DATA_SOURCE = DATA_SOURCE_PROD;
 
 const SERVICE = {
     'RAIL': 'rail',
