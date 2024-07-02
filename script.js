@@ -35,6 +35,7 @@ const ACCESS_ICON = 'img/elevator-white.svg';
 
 let serviceSelected = SERVICE.RAIL;
 let statusSelected = STATUS.CURRENT;
+let feedTimestamp = '';
 
 let alertsByLine = {};
 // let alertsByStop = {};
@@ -59,17 +60,20 @@ fetch(DATA_SOURCE)
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        // updateLastUpdated(data.header.timestamp);
+        updateLastUpdated(data.header.timestamp);
         processAlerts(data.entity);
     });
 
 function updateLastUpdated(time) {
+    let result = convertDateTime(time);
+    feedTimestamp = result;
+
     // result = convertDateTime(time).toLocaleString();
-    result = new Intl.DateTimeFormat('en-US', {
-        dateStyle: 'short',
-        timeStyle: 'short'
-    }).format(time);
-    document.querySelector("#lastUpdated span").innerHTML = result;
+    // result = new Intl.DateTimeFormat('en-US', {
+    //     dateStyle: 'short',
+    //     timeStyle: 'short'
+    // }).format(time);
+    // document.querySelector("#lastUpdated span").innerHTML = result;
 }
 
 function convertDateTime(time) {
@@ -141,34 +145,6 @@ function sortAlertsByEffectiveDate(alerts) {
         } else {
             return 0;
         }
-
-
-        // check if end time exists
-        // if (a.alert.active_period[0].end) {
-        //     if (b.alert.active_period[0].end) {
-        //         if (aStartTime < bStartTime) {
-        //             return -1;
-        //         } else if (aStartTime > bStartTime) {
-        //             return 1;
-        //         } else {
-        //             return 0;
-        //         }
-        //     } else {
-        //         return -1;
-        //     }
-        // } else {
-        //     if (b.alert.active_period[0].end) {
-        //         return 1;
-        //     } else {
-        //         if (aStartTime < bStartTime) {
-        //             return -1;
-        //         } else if (aStartTime > bStartTime) {
-        //             return 1;
-        //         } else {
-        //             return 0;
-        //         }
-        //     }
-        // }
     });
 }
 
@@ -394,7 +370,7 @@ function updateAccessView() {
     if (Object.keys(filteredAlerts).length == 0) {
         let noAlerts = document.createElement("div");
         noAlerts.classList.add("alert-item");
-        noAlerts.innerHTML = "No alerts found.";
+        noAlerts.innerHTML = "No elevator alerts found.";
         alertList.appendChild(noAlerts);
     } else {
         for (let item in filteredAlerts) {
@@ -470,13 +446,29 @@ function updateAccessView() {
 
 function updateView() {
     let filteredAlerts = [];
+    let busVsRail = '';
+    let nowvsLater = '';
+
+    switch (statusSelected) {
+        case STATUS.ALL:
+            nowvsLater = 'current or upcoming';
+            break;
+        case STATUS.CURRENT:
+            nowvsLater = 'current';
+            break;
+        case STATUS.UPCOMING:
+            nowvsLater = 'upcoming';
+            break;
+    }
 
     switch (serviceSelected) {
         case SERVICE.RAIL:
             filteredAlerts = railAlerts[statusSelected];
+            busVsRail = 'trains';
             break;
         case SERVICE.BUS:
             filteredAlerts = busAlerts[statusSelected];
+            busVsRail = 'buses';
             break;
         case SERVICE.ACCESS:
             updateAccessView();
@@ -489,7 +481,8 @@ function updateView() {
     if (Object.keys(filteredAlerts).length == 0) {
         let noAlerts = document.createElement("div");
         noAlerts.classList.add("alert-item");
-        noAlerts.innerHTML = "No alerts found.";
+        noAlerts.innerHTML = `There are no ${nowvsLater} alerts for ${busVsRail}. Last updated: ${feedTimestamp}.`;
+        
         alertList.appendChild(noAlerts);
     } else {
         // Loop through each key in the filteredAlerts object

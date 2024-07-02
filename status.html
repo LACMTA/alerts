@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="https://use.typekit.net/goe1fni.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/uswds/css/styles.css">
+    <link href="designSystem.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    
+    <title>Metro | Alerts Status</title>
+    
+    <style>
+        #timestamp, #now {
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="status" style="margin: 50px;">
+        <h1>Alerts Status</h1>
+
+        <p>
+            Alerts feed timestamp: <span id="timestamp"></span>
+        </p>
+        <p>
+            Current time: <span id="now"></span>
+        </p>
+        
+    </div>
+
+<script>
+    const DATA_SOURCE = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
+    fetch(DATA_SOURCE)
+        .then(response => response.json())
+        .then(data => {
+            let result = new Intl.DateTimeFormat('en-US', {
+                dateStyle: 'short',
+                timeStyle: 'long'
+            }).format(data.header.timestamp * 1000);
+
+            document.getElementById('timestamp').textContent = result;
+            document.getElementById('now').textContent = new Date().toLocaleString();
+        });
+
+</script>
+</body>
+
+</html>
