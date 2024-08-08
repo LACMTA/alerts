@@ -1,0 +1,69 @@
+{
+    "header": {
+        "gtfs_realtime_version": "2.0",
+        "incrementality": "FULL_DATASET",
+        "timestamp": 1715022242
+    },
+    "entity": [
+        {
+            "id": "13932",
+            "alert": {
+              "effect": "OTHER_EFFECT",
+              "effect_detail": {
+                "translation": [
+                  {
+                    "text": "ACCESS_ISSUE",
+                    "language": "en"
+                  }
+                ]
+              },
+              "cause": "OTHER_CAUSE",
+              "cause_detail": {
+                "translation": [
+                  {
+                    "text": "OTHER_CAUSE",
+                    "language": "en"
+                  }
+                ]
+              },
+              "header_text": {
+                "translation": [
+                  {
+                    "text": "Elevator outage scheduled at Firestone from 10:00 AM to 12:00 PM on Wed Aug 7. Use 103rd St/Watts Towers or Florence stations + Access Services Shuttle as alternative. \n",
+                    "language": "en"
+                  }
+                ]
+              },
+              "description_text": {
+                "translation": [
+                  {
+                    "text": "Affected routes:\r\nA Line (Blue)",
+                    "language": "en"
+                  }
+                ]
+              },
+              "severity_level": "WARNING",
+              "active_period": [
+                {
+                  "start": 1723050000,
+                  "end": 1723057200
+                }
+              ],
+              "informed_entity": [
+                {
+                  "route_id": "801",
+                  "stop_id": "80114"
+                },
+                {
+                  "route_id": "801",
+                  "stop_id": "80114A"
+                },
+                {
+                  "route_id": "801",
+                  "stop_id": "80114B"
+                }
+              ]
+            }
+          }
+    ]
+}

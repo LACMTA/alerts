@@ -5,6 +5,8 @@ const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us
 const DATA_SOURCE_TEST = 'alerts_enhanced.json';
 const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
+const DATA_SOURCE_COMBINED = 'https://6lzcmtttcfccfzzt4wfybasjla0wycwj.lambda-url.us-west-1.on.aws/';
+
 const DATA_SOURCE = DATA_SOURCE_PROD;
 
 const SERVICE = {
