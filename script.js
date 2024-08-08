@@ -7,7 +7,7 @@ const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
 const DATA_SOURCE_COMBINED = 'https://6lzcmtttcfccfzzt4wfybasjla0wycwj.lambda-url.us-west-1.on.aws/';
 
-const DATA_SOURCE = DATA_SOURCE_PROD;
+const DATA_SOURCE = DATA_SOURCE_COMBINED;
 
 const SERVICE = {
     'RAIL': 'rail',
@@ -61,7 +61,9 @@ let accessAlerts = {
     'upcoming': []
 };
 
-fetch(DATA_SOURCE)
+fetch(DATA_SOURCE, {
+        method: "POST"
+    })
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -200,7 +202,7 @@ function processAlerts(data) {
             alert.alert.informed_entity.some((entity, i) => {
                 // ACCESS ALERT
                 // Check if facility_id exists
-                if (entity.facility_id) {
+                if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
                     accessAlerts.all.push(alert);
 
                     if (isUpcoming(alert)) {
