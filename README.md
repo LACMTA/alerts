@@ -1,6 +1,6 @@
 # alerts-dev
 
-This is the staging environment for the Alerts page. The `dev` branch from [the alerts repo](https://github.com/LACMTA/alerts) is pushed here so the page can be tested.
+This is the `dev` branch from [the alerts repo](https://github.com/LACMTA/alerts).  Updates are pushed here so the page can be tested live.
 
 ## Development
 
