@@ -1,7 +1,8 @@
-# alerts-page-prototype
-This is a prototype for a redesign of the Alerts page on Metro.net
+# alerts-dev
 
-The `dev` branch is deployed to the staging environment through the `alerts-dev` repository.
+This is the staging environment for the Alerts page. The `dev` branch from [the alerts repo](https://github.com/LACMTA/alerts) is pushed here so the page can be tested.
+
+## Development
 
 To set up the project locally to deploy to the `alerts-dev` repository, set up a remote URL and push:
 
