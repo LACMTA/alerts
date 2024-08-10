@@ -192,56 +192,76 @@ function processAlerts(data) {
             console.log(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
         } else if (alert.alert.informed_entity.length == 0) {
             console.log(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
-        } else  {// At least one object exists in informed_entity
-            // Loop through each object inside informed_entity
-            // to determine what kind of alert this is (bus, rail, or accessibility)
-            // Return after the first entity which determines this.
-            alert.alert.informed_entity.some((entity, i) => {
-                // ACCESS ALERT
-                // Check if facility_id exists
+        } else {
+            alert.alert.informed_entity.forEach((elem, i) => {
+                let targetService = '';
+
                 if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
-                    // accessAlerts.all.push(alert);
-
-                    // if (isUpcoming(alert)) {
-                    //     accessAlerts.upcoming.push(alert);
-                    // } else {
-                    //     accessAlerts.current.push(alert);
-                    // }
-                    categorizeAndStoreAlert(splitLine(entity.route_id), alert, accessAlerts);
-
-                    // return true;
-                } else { // BUS/RAIL ALERT - route_id exists
-                    // Check if this is bus or rail
-                    if (!entity.agency_id) {
-
-                        console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has no agency_id`);
-
-                    } else if (entity.agency_id == BUS_AGENCY_ID) {
-
-                        categorizeAndStoreAlert(splitLine(entity.route_id), alert, busAlerts);
-                        // return true;
-
-                    } else if (entity.agency_id == RAIL_AGENCY_ID) {
-
-                        categorizeAndStoreAlert(splitLine(entity.route_id), alert, railAlerts);
-                        // return true;
-
+                    targetService = SERVICE.ACCESS;
+                } else {
+                    if (elem.agency_id == BUS_AGENCY_ID) {
+                        targetService = SERVICE.BUS;
+                    } else if (elem.agency_id == RAIL_AGENCY_ID) {
+                        targetService = SERVICE.RAIL;
                     } else {
-
                         console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has an agency_id that is not Metro bus or rail`);
                         console.log(alert);
-                        // return true;
-
                     }
                 }
+
+                let simplifiedAlert = alert;
+                simplifiedAlert.alert.informed_entity = [elem];
+                let targetServiceArr = targetService == SERVICE.ACCESS ? accessAlerts : targetService == SERVICE.BUS ? busAlerts : railAlerts;
+                categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+
             });
+            // alert.alert.informed_entity.some((elem, i, arr) => {
+            //     // ACCESS ALERT
+            //     // Check if facility_id exists
+            //     if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
+            //         // accessAlerts.all.push(alert);
+
+            //         // if (isUpcoming(alert)) {
+            //         //     accessAlerts.upcoming.push(alert);
+            //         // } else {
+            //         //     accessAlerts.current.push(alert);
+            //         // }
+            //         categorizeAndStoreAlert(splitLine(entity.route_id), alert, accessAlerts);
+
+            //         // return true;
+            //     } else { // BUS/RAIL ALERT - route_id exists
+            //         // Check if this is bus or rail
+            //         if (!elem.agency_id) {
+
+            //             console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has no agency_id`);
+
+            //         } else if (elem.agency_id == BUS_AGENCY_ID) {
+
+            //             categorizeAndStoreAlert(splitLine(elem.route_id), alert, busAlerts);
+            //             // return true;
+
+            //         } else if (elem.agency_id == RAIL_AGENCY_ID) {
+
+            //             categorizeAndStoreAlert(splitLine(elem.route_id), alert, railAlerts);
+            //             // return true;
+
+            //         } else {
+
+            //             console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has an agency_id that is not Metro bus or rail`);
+            //             console.log(alert);
+            //             // return true;
+
+            //         }
+            //     }
+            // });
         }
     });
 
     // Combine Current and Upcoming Alerts, grouped by route_id
     combineAlerts(railAlerts);
     combineAlerts(busAlerts);
-    combineAccessAlerts(accessAlerts);
+    // combineAccessAlerts(accessAlerts);
+    combineAlerts(accessAlerts);
 
     console.log(alertsByLine);
 
@@ -413,7 +433,7 @@ function updateAccessView() {
                 // Create alert-item element
                 let newAlert = document.createElement("div");
                 newAlert.classList.add("alert-item");
-                newAlert.id = "alert_id_" + alert.id;
+                newAlert.setAttribute('data-alert-id', alert.id);
 
                 // Create icon element
                 let icon = document.createElement("div");
@@ -525,7 +545,7 @@ function updateView() {
                 // Create alert-item element
                 let newAlert = document.createElement("div");
                 newAlert.classList.add("alert-item");
-                newAlert.id = "alert_id_" + alert.id;
+                newAlert.setAttribute('data-alert-id', alert.id);
 
                 // Create icon element
                 let icon = document.createElement("div");
