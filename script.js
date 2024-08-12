@@ -61,11 +61,20 @@ let accessAlerts = {
 fetch(DATA_SOURCE, {
         method: "POST"
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.ok) {
+            return response.json()
+        }
+        throw new Error('Network response was not ok.');
+    })
     .then(data => {
+        console.log('Request successfull!');
         console.log(data);
         updateLastUpdated(data.header.timestamp);
         processAlerts(data.entity);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
     });
 
 function updateLastUpdated(time) {
