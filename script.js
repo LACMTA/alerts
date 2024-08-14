@@ -59,7 +59,7 @@ let accessAlerts = {
 };
 
 fetch(DATA_SOURCE, {
-        method: "POST"
+        method: "GET"
     })
     .then(response => {
         if (response.ok) {
