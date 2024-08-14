@@ -5,7 +5,7 @@ const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us
 const DATA_SOURCE_TEST = 'alerts_enhanced.json';
 const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
-const DATA_SOURCE_COMBINED = 'https://6lzcmtttcfccfzzt4wfybasjla0wycwj.lambda-url.us-west-1.on.aws/';
+const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
 
 const DATA_SOURCE = DATA_SOURCE_COMBINED;
 
