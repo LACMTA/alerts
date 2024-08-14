@@ -475,9 +475,14 @@ function updateAccessView() {
 
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
-                content_description.innerHTML = alert.alert.header_text.translation[0].text + "<br><br>" + alert.alert.description_text.translation[0].text;
 
-                content_description.innerHTML += '<br><br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
+                let headerText = alert.alert.header_text.translation[0].text;
+                let descriptionText = alert.alert.description_text.translation[0].text;
+
+                content_description.innerHTML = headerText;
+                content_description.innerHTML += descriptionText.length > 0 ? "<br><br>" + descriptionText + "<br>": '';
+
+                content_description.innerHTML += '<br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
                 if (alert.alert.active_period[0].end) {
                     content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
                 } else {
