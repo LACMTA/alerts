@@ -426,6 +426,11 @@ function updateAccessView() {
     let alertList = document.querySelector("#alert-list__content");
     alertList.innerHTML = '';
 
+    // temporarily show a 'coming soon message'
+    alertList.innerHTML = `<div class="alert-item">Coming soon!</div>`;
+    return;
+    // end of temporary message
+
     let service = getServiceSelected();
     let nowvsLater = getStatusSelected();
 
