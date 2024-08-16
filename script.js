@@ -427,7 +427,7 @@ function updateAccessView() {
     alertList.innerHTML = '';
 
     // temporarily show a 'coming soon message'
-    alertList.innerHTML = `<div class="alert-item">Coming soon!</div>`;
+    alertList.innerHTML = `<div class="alert-item">Coming soon! <a href="https://x.com/metrolaelevator" target="_blank">View Metro Elevator Alerts on X, formerly Twitter.</a></div>`;
     return;
     // end of temporary message
 
