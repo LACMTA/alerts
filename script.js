@@ -42,6 +42,8 @@ let feedTimestamp = '';
 let alertsByLine = {};
 // let alertsByStop = {};
 
+let dataReturned = false;
+
 let railAlerts = {
     'all': [],
     'current': {},
@@ -68,7 +70,8 @@ fetch(DATA_SOURCE, {
         throw new Error('Network response was not ok.');
     })
     .then(data => {
-        console.log('Request successfull!');
+        console.log('Request successful!');
+        dataReturned = true;
         console.log(data);
         updateLastUpdated(data.header.timestamp);
         processAlerts(data.entity);
@@ -529,6 +532,7 @@ function updateView() {
     let filteredAlerts = [];
     let service = getServiceSelected();
     let nowvsLater = getStatusSelected();
+    let routeName = '';
 
     switch (serviceSelected) {
         case SERVICE.RAIL:
@@ -546,11 +550,13 @@ function updateView() {
     alertList.innerHTML = '';
 
     if (Object.keys(filteredAlerts).length == 0) {
-        let noAlerts = document.createElement("div");
-        noAlerts.classList.add("alert-item");
-        noAlerts.innerHTML = `There are no ${nowvsLater} alerts for ${service}. Last updated: ${feedTimestamp}.`;
-        
-        alertList.appendChild(noAlerts);
+        if (dataReturned) {
+            let noAlerts = document.createElement("div");
+            noAlerts.classList.add("alert-item");
+            noAlerts.innerHTML = `There are no ${nowvsLater} alerts for ${service}. Last updated: ${feedTimestamp}.`;
+            
+            alertList.appendChild(noAlerts);
+        }        
     } else {
         // Loop through each key in the filteredAlerts object
         for (let item in filteredAlerts) {
@@ -581,26 +587,32 @@ function updateView() {
                         switch (railRoute) {
                             case '801':
                                 railIcon.src = LINE_ICONS['801'];
+                                routeName = 'A Line';
                                 railIcon.alt = 'A Line';
                                 break;
                             case '802':
                                 railIcon.src = LINE_ICONS['802'];
+                                routeName = 'B Line';
                                 railIcon.alt = 'B Line';
                                 break;
                             case '803':
                                 railIcon.src = LINE_ICONS['803'];
+                                routeName = 'C Line';
                                 railIcon.alt = 'C Line';
                                 break;
                             case '804':
                                 railIcon.src = LINE_ICONS['804'];
+                                routeName = 'E Line';
                                 railIcon.alt = 'D Line';
                                 break;
                             case '805':
                                 railIcon.src = LINE_ICONS['805'];
+                                routeName = 'D Line';
                                 railIcon.alt = 'E Line';
                                 break;
                             case '807':
                                 railIcon.src = LINE_ICONS['807'];
+                                routeName = 'K Line';
                                 railIcon.alt = 'K Line';
                                 break;
                         }
@@ -618,23 +630,27 @@ function updateView() {
                             case '901':
                                 busIcon.src = LINE_ICONS['901'];
                                 busIcon.alt = 'G Line';
+                                routeName = 'G Line';
                                 icon.classList.add("alert-item__icon--bus-icon");
                                 icon.appendChild(busIcon);
                                 break;
                             case '910':
                                 busIcon.src = LINE_ICONS['910'];
                                 busIcon.alt = 'J Line';
+                                routeName = 'J Line';
                                 icon.classList.add("alert-item__icon--bus-icon");
                                 icon.appendChild(busIcon);
                                 break;
                             case '950':
                                 busIcon.src = LINE_ICONS['950'];
                                 busIcon.alt = 'J Line';
+                                routeName = 'J Line';
                                 icon.classList.add("alert-item__icon--bus-icon");
                                 icon.appendChild(busIcon);
                                 break;
                             default:
                                 icon.classList.add("alert-item__icon--bus");
+                                routeName = `Line ${busRoute}`;
                         }
 
                         icon.innerHTML = `<div>${item}</div>`;
@@ -668,6 +684,11 @@ function updateView() {
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
                 content_description.innerHTML = alert.alert.description_text.translation[0].text;
+
+                if (alert.alert.url) {
+                    content_description.innerHTML += `<br><br><a href="${alert.alert.url.translation[0].text}" target="_blank">More info on service impact to ${routeName}.</a>`;
+                }
+                
 
                 content_description.innerHTML += '<br><br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
                 if (alert.alert.active_period[0].end) {
