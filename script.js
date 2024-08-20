@@ -430,8 +430,8 @@ function updateAccessView() {
     alertList.innerHTML = '';
 
     // temporarily show a 'coming soon message'
-    alertList.innerHTML = `<div>Coming soon!<br><br></div><div>For now, you can still view <a href="https://x.com/metrolaelevator" target="_blank">Metro Elevator Alerts on X, formerly Twitter.</a></div>`;
-    return;
+    // alertList.innerHTML = `<div>Coming soon!<br><br></div><div>For now, you can still view <a href="https://x.com/metrolaelevator" target="_blank">Metro Elevator Alerts on X, formerly Twitter.</a></div>`;
+    // return;
     // end of temporary message
 
     let service = getServiceSelected();
