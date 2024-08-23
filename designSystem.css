@@ -7,6 +7,29 @@ html {
     color: #575757;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.content-wrapper {
+    margin: 0 auto;
+    padding: 24px 34px;
+
+    height: 100%;
+}
+
+.content-wrapper>div {
+    margin-bottom: 12px;
+}
+
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
     font-family: 'ff-scala-sans-pro', sans-serif;
     font-weight: 700;
