@@ -83,13 +83,6 @@ fetch(DATA_SOURCE, {
 function updateLastUpdated(time) {
     let result = convertDateTime(time);
     feedTimestamp = result;
-
-    // result = convertDateTime(time).toLocaleString();
-    // result = new Intl.DateTimeFormat('en-US', {
-    //     dateStyle: 'short',
-    //     timeStyle: 'short'
-    // }).format(time);
-    // document.querySelector("#lastUpdated span").innerHTML = result;
 }
 
 function convertDateTime(time) {
@@ -397,6 +390,14 @@ function updateAccessView() {
     let service = getServiceSelected();
     let nowvsLater = getStatusSelected();
 
+    let elevatorMessage = document.createElement("div");
+    elevatorMessage.classList.add("alert-item");
+    let elevatorMessageText = document.createElement("div");
+    elevatorMessageText.innerHTML = `If you encounter an elevator or escalator problem not listed here, please report via our <a href="https://www.metro.net/riding/la-metro-transit-watch-app/" target="_blank">TransitWatch App</a> or inform Metro staff at station.`;
+    elevatorMessage.appendChild(elevatorMessageText);
+    alertList.appendChild(elevatorMessage);
+
+
     if (Object.keys(filteredAlerts).length == 0) {
         let noAlerts = document.createElement("div");
         noAlerts.classList.add("alert-item");
@@ -427,16 +428,13 @@ function updateAccessView() {
 
                 let content_title = document.createElement('div');
                 content_title.classList.add("alert-item__title");
-                //content_title.innerHTML = alert.alert.informed_entity[0].stop_name + ": " + alert.alert.informed_entity[0].mode;
                 content_title.innerHTML = alert.alert.header_text.translation[0].text;
 
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
 
-                // let headerText = alert.alert.header_text.translation[0].text;
                 let descriptionText = alert.alert.description_text.translation[0].text;
 
-                // content_description.innerHTML = headerText;
                 content_description.innerHTML += descriptionText.length > 0 ? descriptionText + "<br>": '';
 
                 content_description.innerHTML += '<br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
@@ -631,15 +629,18 @@ function updateView() {
                 content_title.innerHTML = alert.alert.header_text.translation[0].text;
 
                 let content_description = document.createElement('div');
-                content_description.classList.add("alert-item__description");
-                content_description.innerHTML = alert.alert.description_text.translation[0].text;
+
+                if (alert.alert.description_text.translation[0].text != '') {    
+                    content_description.classList.add("alert-item__description");
+                    content_description.innerHTML = alert.alert.description_text.translation[0].text + '<br><br>';
+                }
 
                 if (alert.alert.url) {
-                    content_description.innerHTML += `<br><br><a href="${alert.alert.url.translation[0].text}" target="_blank">More info on service impact to ${routeName}.</a>`;
+                    content_description.innerHTML += `<a href="${alert.alert.url.translation[0].text}" target="_blank">More info on service impact to ${routeName}.</a><br><br>`;
                 }
                 
 
-                content_description.innerHTML += '<br><br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
+                content_description.innerHTML += 'Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
                 if (alert.alert.active_period[0].end) {
                     content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
                 } else {
