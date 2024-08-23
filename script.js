@@ -227,52 +227,12 @@ function processAlerts(data) {
                 categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
 
             });
-            // alert.alert.informed_entity.some((elem, i, arr) => {
-            //     // ACCESS ALERT
-            //     // Check if facility_id exists
-            //     if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
-            //         // accessAlerts.all.push(alert);
-
-            //         // if (isUpcoming(alert)) {
-            //         //     accessAlerts.upcoming.push(alert);
-            //         // } else {
-            //         //     accessAlerts.current.push(alert);
-            //         // }
-            //         categorizeAndStoreAlert(splitLine(entity.route_id), alert, accessAlerts);
-
-            //         // return true;
-            //     } else { // BUS/RAIL ALERT - route_id exists
-            //         // Check if this is bus or rail
-            //         if (!elem.agency_id) {
-
-            //             console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has no agency_id`);
-
-            //         } else if (elem.agency_id == BUS_AGENCY_ID) {
-
-            //             categorizeAndStoreAlert(splitLine(elem.route_id), alert, busAlerts);
-            //             // return true;
-
-            //         } else if (elem.agency_id == RAIL_AGENCY_ID) {
-
-            //             categorizeAndStoreAlert(splitLine(elem.route_id), alert, railAlerts);
-            //             // return true;
-
-            //         } else {
-
-            //             console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has an agency_id that is not Metro bus or rail`);
-            //             console.log(alert);
-            //             // return true;
-
-            //         }
-            //     }
-            // });
         }
     });
 
     // Combine Current and Upcoming Alerts, grouped by route_id
     combineAlerts(railAlerts);
     combineAlerts(busAlerts);
-    // combineAccessAlerts(accessAlerts);
     combineAlerts(accessAlerts);
 
     console.log(alertsByLine);
@@ -455,40 +415,29 @@ function updateAccessView() {
                 // Create icon element
                 let icon = document.createElement("div");
                 icon.classList.add("alert-item__icon");
-                // icon.classList.add("alert-item__icon--access");
                 icon.classList.add("alert-item__icon--rail");
 
-                // let accessIconDiv = document.createElement("div");
-                // let accessIcon = document.createElement("img");
-
-                // accessIcon.src = 'img/elevator-white.svg';
-                // accessIcon.alt = 'elevator icon';
-
-                // accessIconDiv.appendChild(accessIcon);
-                // icon.appendChild(accessIconDiv);
-
-                // let lineIconDiv = document.createElement("div");
                 let lineIcon = document.createElement("img");
 
                 lineIcon.src = LINE_ICONS[item];
-                // lineIconDiv.appendChild(lineIcon);
-                icon.appendChild(lineIcon);
+                                icon.appendChild(lineIcon);
 
                 let content = document.createElement("div");
                 content.classList.add("alert-item__content");
 
                 let content_title = document.createElement('div');
                 content_title.classList.add("alert-item__title");
-                content_title.innerHTML = alert.alert.informed_entity[0].stop_name + ": " + alert.alert.informed_entity[0].mode;
+                //content_title.innerHTML = alert.alert.informed_entity[0].stop_name + ": " + alert.alert.informed_entity[0].mode;
+                content_title.innerHTML = alert.alert.header_text.translation[0].text;
 
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
 
-                let headerText = alert.alert.header_text.translation[0].text;
+                // let headerText = alert.alert.header_text.translation[0].text;
                 let descriptionText = alert.alert.description_text.translation[0].text;
 
-                content_description.innerHTML = headerText;
-                content_description.innerHTML += descriptionText.length > 0 ? "<br><br>" + descriptionText + "<br>": '';
+                // content_description.innerHTML = headerText;
+                content_description.innerHTML += descriptionText.length > 0 ? descriptionText + "<br>": '';
 
                 content_description.innerHTML += '<br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
                 if (alert.alert.active_period[0].end) {
