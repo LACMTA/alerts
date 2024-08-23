@@ -321,6 +321,7 @@ function handleServiceClick(e) {
             break;
     }
 
+    dataLayer.push({'service-status': serviceSelected + '|' + statusSelected});
     updateView();
 }
 
@@ -350,6 +351,7 @@ function handleStatusClick(e) {
             break;
     }
 
+    dataLayer.push({'service-status': serviceSelected + '|' + statusSelected});
     updateView();
 }
 
