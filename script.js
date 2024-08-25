@@ -25,7 +25,7 @@ const LINE_ICONS = {
     '801': 'https://lacmta.github.io/metro-iconography/Service_ALine.svg',
     '802': 'https://lacmta.github.io/metro-iconography/Service_BLine.svg',
     '803': 'https://lacmta.github.io/metro-iconography/Service_CLine.svg',
-    '804': 'https://lacmta.github.io/metro-iconography/Service_ELine.svg',
+    '804': 'https://lacmta.github.io/metro-iconography/Service_ELine2.svg',
     '805': 'https://lacmta.github.io/metro-iconography/Service_DLine.svg',
     '807': 'https://lacmta.github.io/metro-iconography/Service_KLine.svg',
     '901': 'https://lacmta.github.io/metro-iconography/Service_GLine.svg',
