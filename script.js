@@ -210,15 +210,20 @@ function processAlerts(data) {
                         targetService = SERVICE.RAIL;
                     } else {
                         console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has an agency_id that is not Metro bus or rail`);
-                        console.log(alert);
+                        console.log(alert);                     
                     }
                 }
 
-                let simplifiedAlert = alert;
-                simplifiedAlert.alert.informed_entity = [elem];
-                let targetServiceArr = targetService == SERVICE.ACCESS ? accessAlerts : targetService == SERVICE.BUS ? busAlerts : railAlerts;
-                categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
-
+                // Remove the duplicate Access alerts that are entered into IBI in addition to the Airtable.
+                if (alert.alert['effect_detail'] == "ACCESS_ISSUE") {
+                    console.log(`Alert ${alert.id}, entity index ${i}, is an access alert from IBI`);
+                    console.log(alert);
+                } else {
+                    let simplifiedAlert = alert;
+                    simplifiedAlert.alert.informed_entity = [elem];
+                    let targetServiceArr = targetService == SERVICE.ACCESS ? accessAlerts : targetService == SERVICE.BUS ? busAlerts : railAlerts;
+                    categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+                }
             });
         }
     });
