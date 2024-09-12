@@ -222,7 +222,13 @@ function processAlerts(data) {
                     let simplifiedAlert = alert;
                     simplifiedAlert.alert.informed_entity = [elem];
                     let targetServiceArr = targetService == SERVICE.ACCESS ? accessAlerts : targetService == SERVICE.BUS ? busAlerts : railAlerts;
-                    categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+
+                    if (alert.alert.active_period != null) {
+                        categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+                    } else {
+                        console.log(`Alert ${alert.id} has no active_period`);
+                        console.log(alert);
+                    }
                 }
             });
         }
