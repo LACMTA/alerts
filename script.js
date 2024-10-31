@@ -223,8 +223,15 @@ function processAlerts(data) {
                     simplifiedAlert.alert.informed_entity = [elem];
                     let targetServiceArr = targetService == SERVICE.ACCESS ? accessAlerts : targetService == SERVICE.BUS ? busAlerts : railAlerts;
 
-                    if (alert.alert.active_period != null) {
-                        categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+                    if (alert.alert.active_period != null && elem.route_id != null) {
+                        try {
+                            categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+                        } catch (error) {
+                            console.log(`Error processing alert ${alert.id}`);
+                            console.log(alert);
+                        }
+                        
+                        
                     } else {
                         console.log(`Alert ${alert.id} has no active_period`);
                         console.log(alert);
