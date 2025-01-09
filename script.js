@@ -60,6 +60,12 @@ let accessAlerts = {
     'upcoming': []
 };
 
+let allAlerts = {
+    rail: railAlerts,
+    bus: busAlerts,
+    access: accessAlerts
+};
+
 fetch(DATA_SOURCE, {
         method: "GET"
     })
@@ -189,7 +195,7 @@ function combineAccessAlerts(alerts) {
     }
 }
 
-function processAlerts(data) {
+function processAlertsBackup(data) {
     // Add Current and Upcoming Alerts
     data.forEach(alert => {
         // Check if informed_entity exists and is not empty
@@ -198,8 +204,10 @@ function processAlerts(data) {
         } else if (alert.alert.informed_entity.length == 0) {
             console.log(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
         } else {
+            console.log('Alert type: ' + alert.alert.header_text.translation[0].text);
+
             alert.alert.informed_entity.forEach((elem, i) => {
-                let targetService = '';
+                console.log(`  - ${elem.route_id} / ${elem.stop_id}`);
 
                 if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
                     targetService = SERVICE.ACCESS;
@@ -240,6 +248,82 @@ function processAlerts(data) {
             });
         }
     });
+}
+
+function processAlerts2(data) {
+    // Add Current and Upcoming Alerts
+    data.forEach(alert => {
+        // Check if informed_entity exists and is not empty
+        if (!alert.alert.informed_entity) {
+            console.log(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
+        } else if (alert.alert.informed_entity.length == 0) {
+            console.log(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
+        } else {
+            console.log('Alert type: ' + alert.alert.header_text.translation[0].text);
+
+            let affectedRoutes = [];
+            
+            if (alert.alert.effect == "ACCESSIBILITY_ISSUE") { // Handle accessibility alerts
+                targetService = SERVICE.ACCESS;
+            } else { // Handle bus and rail alerts
+                affectedRoutes = [];
+
+                alert.alert.informed_entity.forEach((elem, i) => {
+                    console.log(`  - ${elem.route_id} / ${elem.stop_id}`);
+    
+                    if (elem.agency_id == RAIL_AGENCY_ID) {
+                            targetService = SERVICE.RAIL;
+                    } else {
+                        console.log(`ERROR - Alert ${alert.id}, entity index ${i}, has an agency_id that is not Metro bus or rail`);
+                        console.log(alert);                     
+                    }
+    
+                    // Ignore the Access alerts that are entered into IBI as duplicates.
+                    if (alert.alert['effect_detail'] == "ACCESS_ISSUE") {
+                        console.log(`Alert ${alert.id}, entity index ${i}, is an access alert from IBI`);
+                        console.log(alert);
+                    } else {
+                        if (!affectedRoutes.includes(elem.route_id)) {
+                            affectedRoutes.push(elem.route_id);
+                        }
+                    }
+
+                    affectedRoutes.forEach(route => {
+                        // Identify which service this alert is for: bus, rail, or access
+                        let simplifiedAlert = alert;
+                        simplifiedAlert.alert.informed_entity = [elem];
+                        
+                        let targetServiceArr;
+                        switch(targetService) {
+                            case SERVICE.ACCESS:
+                                targetServiceArr = accessAlerts;
+                                break;
+                            case SERVICE.BUS:
+                                targetServiceArr = busAlerts;
+                                break;
+                            case SERVICE.RAIL:
+                                targetServiceArr = railAlerts;
+                                break;
+                        }
+    
+                        // Categorize & Store Alert
+                        if (alert.alert.active_period != null && elem.route_id != null) {
+                            try {
+                                categorizeAndStoreAlert(splitLine(elem.route_id), simplifiedAlert, targetServiceArr);
+                            } catch (error) {
+                                // Doesn't have an active period our route_id
+                                console.log(`Error processing alert ${alert.id}`);
+                                console.log(alert);
+                            }
+                        } else {
+                            console.log(`Alert ${alert.id} has no active_period`);
+                            console.log(alert);
+                        }
+                    });
+                });
+            }
+        }
+    });
 
     // Combine Current and Upcoming Alerts, grouped by route_id
     combineAlerts(railAlerts);
@@ -265,8 +349,123 @@ function processAlerts(data) {
     }
 }
 
+function processAlerts(data) {
+    // Loop through each alert
+    // Initial check to see if alert is valid:
+    // - informed_entity exists and is not empty
+    // - active_period exists
+    // Handle the alert based on whether it is an accessibility alert or not:
+    // - Check if this is an accessibility alert based on effect/effect_detail
+    // - Otherwise this is a bus/rail alert
+    // Handling function returns a simplified alert object.
+    // Store the simplified alert object in the appropriate array, passing in the route_id, alert, and alertsArray
+    // Combine the rail, bus, and access alerts
+    // Update the view
+    let i = 0;
+    let n = 0;
+
+    data.forEach(alert => {
+        console.debug('-----------------------------------');
+        // Check if informed_entity exists and is not empty
+        if (!alert.alert.informed_entity) {
+            console.error(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
+        } else if (alert.alert.informed_entity.length == 0) {
+            console.error(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
+        } else if (!alert.alert.active_period) {
+            console.error(`Alert ${alert.id} has no active_period`);
+        } else {
+            // This alert should be valid
+            let targetServiceArr;
+            let simplifiedAlert;
+            let affectedRoutes = [];
+            let affectedStops = [];
+            
+            // Check if this is an accessibility alert from Airtable
+            if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
+                // This is an accessibility-related alert.
+                targetServiceArr = allAlerts.access;
+                console.debug(`Alert ${alert.id} is an accessibility alert`);
+                i++;
+
+            } else if (alert.alert.effect_detail && alert.alert.effect_detail == "ACCESS_ISSUE") {
+                // This is an accessibility-related alert from IBI.  Do nothing with it.
+                i++;
+                console.debug(`Alert ${alert.id} is an access alert from IBI`);
+                return;
+            } else {
+                // This is a bus or rail alert.
+                i++;
+            }
+
+            alert.alert.informed_entity.forEach((elem, i) => {
+                n = 0;
+
+                 if (elem.agency_id == RAIL_AGENCY_ID || elem.agency_id == BUS_AGENCY_ID) {
+                    if (alert.alert.effect == 'ACCESSIBILITY_ISSUE') {
+                        targetServiceArr = allAlerts.access;
+                    } else if (elem.agency_id == RAIL_AGENCY_ID) {
+                        targetServiceArr = allAlerts.rail;
+                        console.debug(`Alert ${alert.id} is a rail alert`);
+                    } else {
+                        targetServiceArr = allAlerts.bus;
+                        console.debug(`Alert ${alert.id} is a bus alert`);
+                    }
+
+                    // Add route_id to affectedRoutes if it doesn't already exist
+                    if (!affectedRoutes.includes(elem.route_id)) {
+                        simplifiedAlert = alert;
+                        simplifiedAlert.alert.informed_entity = [elem];
+                        
+                        affectedRoutes.push({
+                            'route_id': elem.route_id,
+                            'alert': simplifiedAlert
+                         });
+
+                        console.debug(`Route ${elem.route_id} added to affectedRoutes`);
+                    }
+
+                    // Add stop_id to affectedStops if it doesn't already exist
+                    if (elem.stop_id) {
+                        let stop = splitStop(elem.stop_id);
+                        if (!affectedStops.includes(stop)) {
+                            affectedStops.push(stop);
+                            console.debug(`Stop ${stop} added to affectedStops`);
+                        }
+                    }
+                } else {
+                    console.error(`Alert ${alert.id} has an agency_id that is not Metro bus or rail`);
+                }
+            });
+
+            console.debug(`Alert ${alert.id} has ${affectedRoutes.length} affected routes and ${affectedStops.length} affected stops`);
+            affectedRoutes.forEach(route => {
+                n++;
+                categorizeAndStoreAlert(splitLine(route.route_id), simplifiedAlert, targetServiceArr);
+            });
+            console.debug(`Number of alerts added for alert_id ${alert.id}: ${n}`);
+            
+        }
+    });
+    console.log(`${i} alerts processed`);
+
+    busAlerts = allAlerts.bus;
+    railAlerts = allAlerts.rail;
+    accessAlerts = allAlerts.access;
+
+    combineAlerts(railAlerts);
+    combineAlerts(busAlerts);
+    combineAlerts(accessAlerts);
+
+    // If DOM is loaded, updateView(). Otherwise, wait for DOM to load.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateView);
+    } else {
+        updateView();
+    }
+}
+
 function splitLine(line) {
-    // Remove hyphen and version number    
+    // Remove hyphen and version number 
     let i = line.indexOf("-");
     if (i == -1) {
         return line;
@@ -439,7 +638,7 @@ function updateAccessView() {
                 let lineIcon = document.createElement("img");
 
                 lineIcon.src = LINE_ICONS[item];
-                                icon.appendChild(lineIcon);
+                icon.appendChild(lineIcon);
 
                 let content = document.createElement("div");
                 content.classList.add("alert-item__content");
