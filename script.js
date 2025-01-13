@@ -35,10 +35,11 @@ const LINE_ICONS = {
 
 const ACCESS_ICON = 'img/elevator-white.svg';
 
-let serviceSelected = SERVICE.RAIL;
+// Set default on load to show Current Bus alerts:
+let serviceSelected = SERVICE.BUS;
 let statusSelected = STATUS.CURRENT;
-let feedTimestamp = '';
 
+let feedTimestamp = '';
 let alertsByLine = {};
 // let alertsByStop = {};
 
