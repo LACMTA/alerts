@@ -1,5 +1,5 @@
-const BUS_AGENCY_ID = 'LACMTA';
-const RAIL_AGENCY_ID = 'LACMTA_Rail';
+const BUS_AGENCY_ID = 'lametro';
+const RAIL_AGENCY_ID = 'lametro-rail';
 
 const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
 const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
@@ -10,7 +10,8 @@ const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
 const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
 
-const DATA_SOURCE = DATA_SOURCE_COMBINED;
+// const DATA_SOURCE = DATA_SOURCE_COMBINED;
+const DATA_SOURCE = [BUS_ALERTS, RAIL_ALERTS];
 
 const SERVICE = {
     'RAIL': 'rail',
@@ -70,82 +71,86 @@ let allAlerts = {
     access: accessAlerts
 };
 
-fetch(DATA_SOURCE, {
-        method: "GET"
-    })
+const fetchPromises = DATA_SOURCE.map(url => fetch(url, { method: "GET" })
     .then(response => {
         if (response.ok) {
-            return response.json()
+            return response.json();
         }
         throw new Error('Network response was not ok.');
     })
+);
+
+Promise.all(fetchPromises)
     .then(data => {
-        console.log('Request successful!');
-        dataReturned = true;
         console.log(data);
-        updateLastUpdated(data.header.timestamp);
-        processAlerts(data.entity);
+        // updateLastUpdated(data.header.timestamp);
+        processAlerts(data);
     })
-    .catch(error => {
-        console.error('Request failed:', error);
+    .catch( error => {
+        console.error(`Request failed: `, error);
     });
 
+
 function updateLastUpdated(time) {
-    let result = convertDateTime(time);
+    let result = formatDate(time);
     feedTimestamp = result;
 }
 
-function convertDateTime(time) {
-    // result = new Date(time * 1000);
+function formatDate(time) {
+    const date = new Date(time);
 
-    result = new Intl.DateTimeFormat('en-US', {
-        dateStyle: 'short',
-        timeStyle: 'short'
-    }).format(time * 1000);
-
-    return result;
-}
-
-function createAlertObjectArray(alert) {
-    let result = [];
-
-    alert.alert.informed_entity.forEach(entity => {
-        let alertObj = {
-            'id': alert.id,
-            'route_id': entity.route_id,
-            'stop_id': entity.stop_id,
-            'start': alert.alert.active_period[0].start,
-            'end': alert.alert.active_period[0].end,
-            'header_text': alert.alert.header_text.translation[0].text,
-            'description_text': alert.alert.description_text.translation[0].text
-        };
-
-        result.push(alertObj);
+    let result = date.toLocaleString('en-US', {
+        year: "2-digit",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true
     });
 
     return result;
 }
 
-function categorizeAndStoreAlert(route_id, alert, alertsArray) {
+// function createAlertObjectArray(alert) {
+//     let result = [];
+
+//     alert.informedEntities.forEach(entity => {
+//         let alertObj = {
+//             'id': alert.id,
+//             'route_id': entity.routeId,
+//             'stop_id': entity.stop_id,
+//             'start': alert.activePeriods[0].start,
+//             'end': alert.activePeriods[0].end,
+//             'headerText': alert.headerText,
+//             'descriptionText': alert.descriptionText
+//         };
+
+//         result.push(alertObj);
+//     });
+
+//     return result;
+// }
+
+function categorizeAndStoreAlert(routeId, alert, alertsArray) {
     let alertStatus = isUpcoming(alert) ? 'upcoming' : 'current';
 
-    if (alertsArray[alertStatus][route_id] == undefined) {
-        alertsArray[alertStatus][route_id] = [];
+    if (alertsArray[alertStatus][routeId] == undefined) {
+        alertsArray[alertStatus][routeId] = [];
     }
 
-    alertsArray[alertStatus][route_id].push(alert);
+    alertsArray[alertStatus][routeId].push(alert);
 }
 
 function sortAlertsByEffectiveDate(alerts) {
     alerts.sort((a, b) => {
-        let aStartTime = new Date(convertDateTime(a.alert.active_period[0].start));
-        let bStartTime = new Date(convertDateTime(b.alert.active_period[0].start));
+        let aStartTime = new Date(formatDate(a.activePeriods[0].start));
+        let bStartTime = new Date(formatDate(b.activePeriods[0].start));
 
         // sort by start time, then by end time (if exists)
         if (aStartTime < bStartTime) {
-            if (a.alert.active_period[0].end && b.alert.active_period[0].end) {
-                let aEndTime = new Date(convertDateTime(a.alert.active_period[0].end));
-                let bEndTime = new Date(convertDateTime(b.alert.active_period[0].end));
+            if (a.activePeriods[0].end && b.activePeriods[0].end) {
+                let aEndTime = new Date(formatDate(a.activePeriods[0].end));
+                let bEndTime = new Date(formatDate(b.activePeriods[0].end));
                 
                 if (aEndTime < bEndTime) {
                     return -1;
@@ -154,7 +159,7 @@ function sortAlertsByEffectiveDate(alerts) {
                 } else {
                     return 0;
                 }
-            } else if (a.alert.active_period[0].end) {
+            } else if (a.activePeriods[0].end) {
                 return -1;
             } else {
                 return 1;
@@ -201,6 +206,8 @@ function combineAccessAlerts(alerts) {
 
 
 function processAlerts(data) {
+    // Data is an array of responses from each API called
+    // Each response is an array of alerts
     // Loop through each alert
     // Initial check to see if alert is valid:
     // - informed_entity exists and is not empty
@@ -215,89 +222,82 @@ function processAlerts(data) {
     let i = 0;
     let n = 0;
 
-    data.forEach(alert => {
-        console.debug('-----------------------------------');
-        // Check if informed_entity exists and is not empty
-        if (!alert.alert.informed_entity) {
-            console.error(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
-        } else if (alert.alert.informed_entity.length == 0) {
-            console.error(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
-        } else if (!alert.alert.active_period) {
-            console.error(`Alert ${alert.id} has no active_period`);
-        } else {
-            // This alert should be valid
-            let targetServiceArr;
-            let simplifiedAlert;
-            let affectedRoutes = [];
-            let affectedStops = [];
-            let accumulatedAlerts = [];
-            
-            // Check if this is an accessibility alert from Airtable
-            if (alert.alert.effect == "ACCESSIBILITY_ISSUE") {
-                // This is an accessibility-related alert.
-                targetServiceArr = allAlerts.access;
-                console.debug(`Alert ${alert.id} is an accessibility alert`);
-                i++;
-
-            } else if (alert.alert.effect_detail && alert.alert.effect_detail == "ACCESS_ISSUE") {
-                // This is an accessibility-related alert from IBI.  Do nothing with it.
-                i++;
-                console.debug(`Alert ${alert.id} is an access alert from IBI`);
-                return;
+    data.forEach(alertFeed => {
+        alertFeed.forEach(alert => {
+            console.debug('-----------------------------------');
+            // Check if informed_entity exists and is not empty
+            if (!alert.informedEntities) {
+                console.error(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
+            } else if (alert.informedEntities.length == 0) {
+                console.error(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
+            } else if (!alert.activePeriods) {
+                console.error(`Alert ${alert.id} has no active_period`);
             } else {
-                // This is a bus or rail alert.
-                i++;
-            }
-
-            alert.alert.informed_entity.forEach((elem, i) => {
-                n = 0;
-
-                 if (elem.agency_id == RAIL_AGENCY_ID || elem.agency_id == BUS_AGENCY_ID) {
-                    if (alert.alert.effect == 'ACCESSIBILITY_ISSUE') {
-                        targetServiceArr = allAlerts.access;
-                    } else if (elem.agency_id == RAIL_AGENCY_ID) {
-                        targetServiceArr = allAlerts.rail;
-                        console.debug(`Alert ${alert.id} is a rail alert`);
-                    } else {
-                        targetServiceArr = allAlerts.bus;
-                        console.debug(`Alert ${alert.id} is a bus alert`);
-                    }
-
-                    if (!affectedRoutes.includes(elem.route_id)) {
-                        simplifiedAlert = alert;
-                        simplifiedAlert.alert.informed_entity = [elem];
-                        affectedRoutes.push(elem.route_id);
+                // This alert should be valid
+                let targetServiceArr;
+                let affectedRoutes = [];
+                let accumulatedAlerts = [];
+                
+                // Check if this is an accessibility alert from Airtable
+                if (alert.effect == "ACCESSIBILITY_ISSUE") {
+                    // This is an accessibility-related alert.
+                    
+                    console.debug(`Alert ${alert.id} is an accessibility alert`);
+                    targetServiceArr = allAlerts.access;
+                    i++;
+                } else if (alert.headerText.toLowerCase().includes('elevator') || alert.headerText.toLowerCase().includes('escalator')) {
+                    // This is an accessibility-related alert from Swiftly
+                    
+                    console.debug(`Alert ${alert.id} is an access alert from Swiftly`);
+                    targetServiceArr = allAlerts.access;
+                    i++;
+                } else if (alert.agencyId == RAIL_AGENCY_ID) {
+                    // This is a rail alert.
+                    
+                    console.debug(`Alert ${alert.id} is a rail alert`);
+                    targetServiceArr = allAlerts.rail;
+                    i++;
+                } else if (alert.agencyId == BUS_AGENCY_ID) {
+                    // This is a bus alert.
+                    
+                    console.debug(`Alert ${alert.id} is a bus alert`);
+                    targetServiceArr = allAlerts.bus;
+                    i++;
+                } else {
+                    // No service type assigned to this alert, return and process the next alert.
+                    return;
+                }
+    
+                alert.informedEntities.forEach((elem, i) => {
+                    n = 0;
+    
+                    let routeId = elem.routeId;
+    
+                    if (!affectedRoutes.includes(routeId)) {
+                        // simplifiedAlert = alert;
+                        // simplifiedalert.informedEntities = [elem];
+                        affectedRoutes.push(routeId);
                         
                         accumulatedAlerts.push({
-                            'route_id': elem.route_id,
-                            'alert': simplifiedAlert
+                            'routeId': routeId,
+                            'alert': alert
                          });
-
-                        console.debug(`Route ${elem.route_id} added to affectedRoutes`);
+    
+                        console.debug(`Route ${routeId} added to affectedRoutes`);
                     }
-
-                    // Add stop_id to affectedStops if it doesn't already exist
-                    if (elem.stop_id) {
-                        let stop = splitStop(elem.stop_id);
-                        if (!affectedStops.includes(stop)) {
-                            affectedStops.push(stop);
-                            console.debug(`Stop ${stop} added to affectedStops`);
-                        }
-                    }
-                } else {
-                    console.error(`Alert ${alert.id} has an agency_id that is not Metro bus or rail`);
-                }
-            });
-
-            console.debug(`Alert ${alert.id} has ${affectedRoutes.length} affected routes and ${affectedStops.length} affected stops`);
-            accumulatedAlerts.forEach(route => {
-                n++;
-                categorizeAndStoreAlert(splitLine(route.route_id), simplifiedAlert, targetServiceArr);
-            });
-            console.debug(`Number of alerts added for alert_id ${alert.id}: ${n}`);
-            
-        }
+                });
+    
+                accumulatedAlerts.forEach(elem => {
+                    n++;
+                    categorizeAndStoreAlert(splitLine(elem.routeId), elem.alert, targetServiceArr);
+                });
+    
+                console.debug(`${n} alerts added for alertId: ${alert.id}`);
+                
+            }
+        });
     });
+
     console.log(`${i} alerts processed`);
 
     busAlerts = allAlerts.bus;
@@ -332,7 +332,7 @@ function splitStop(stop) {
 
 function isUpcoming(alert) {
     let today = new Date();
-    let startTime = new Date(convertDateTime(alert.alert.active_period[0].start));
+    let startTime = new Date(formatDate(alert.activePeriods[0].start));
     let status = today < startTime
     return status;
 }
@@ -470,7 +470,7 @@ function updateAccessView() {
     if (Object.keys(filteredAlerts).length == 0) {
         let noAlerts = document.createElement("div");
         noAlerts.classList.add("alert-item");
-        noAlerts.innerHTML = `There are no ${nowvsLater} alerts for ${service}. Last updated: ${feedTimestamp}.`;
+        noAlerts.innerHTML = `There are no ${nowvsLater} alerts for ${service}.`; // Removed Last Updated day/time because Swiftly doesn't provide it.
         alertList.appendChild(noAlerts);
     } else {
         for (let item in filteredAlerts) {
@@ -497,18 +497,18 @@ function updateAccessView() {
 
                 let content_title = document.createElement('div');
                 content_title.classList.add("alert-item__title");
-                content_title.innerHTML = alert.alert.header_text.translation[0].text;
+                content_title.innerHTML = alert.headerText;
 
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
 
-                let descriptionText = alert.alert.description_text.translation[0].text;
+                let descriptionText = alert.descriptionText;
 
                 content_description.innerHTML += descriptionText.length > 0 ? descriptionText + "<br>": '';
 
-                content_description.innerHTML += '<br>Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
-                if (alert.alert.active_period[0].end) {
-                    content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
+                content_description.innerHTML += '<br>Starting on: ' + formatDate(alert.activePeriods[0].start);
+                if (alert.activePeriods[0].end) {
+                    content_description.innerHTML += '<br>Ending on: ' + formatDate(alert.activePeriods[0].end);
                 } else {
                     content_description.innerHTML += '<br>No end date scheduled yet.';
                 }
@@ -696,23 +696,23 @@ function updateView() {
 
                 let content_title = document.createElement('div');
                 content_title.classList.add("alert-item__title");
-                content_title.innerHTML = alert.alert.header_text.translation[0].text;
+                content_title.innerHTML = alert.headerText;
 
                 let content_description = document.createElement('div');
 
-                if (alert.alert.description_text.translation[0].text != '') {    
+                if (alert.descriptionText != '') {    
                     content_description.classList.add("alert-item__description");
-                    content_description.innerHTML = alert.alert.description_text.translation[0].text + '<br><br>';
+                    content_description.innerHTML = alert.descriptionText + '<br><br>';
                 }
 
-                if (alert.alert.url) {
-                    content_description.innerHTML += `<a href="${alert.alert.url.translation[0].text}" target="_blank">More info on service impact to ${routeName}.</a><br><br>`;
-                }
+                // Not a good idea if we default the URL to https://alerts.metro.net
+                // if (alert.url) {
+                //     content_description.innerHTML += `<a href="${alert.url}" target="_blank">More info on service impact to ${routeName}.</a><br><br>`;
+                // }
                 
-
-                content_description.innerHTML += 'Starting on: ' + convertDateTime(alert.alert.active_period[0].start);
-                if (alert.alert.active_period[0].end) {
-                    content_description.innerHTML += '<br>Ending on: ' + convertDateTime(alert.alert.active_period[0].end);
+                content_description.innerHTML += 'Starting on: ' + formatDate(alert.activePeriods[0].start);
+                if (alert.activePeriods[0].end) {
+                    content_description.innerHTML += '<br>Ending on: ' + formatDate(alert.activePeriods[0].end);
                 } else {
                     content_description.innerHTML += '<br>No end date scheduled yet.';
                 }
