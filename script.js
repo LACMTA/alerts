@@ -1,6 +1,9 @@
 const BUS_AGENCY_ID = 'LACMTA';
 const RAIL_AGENCY_ID = 'LACMTA_Rail';
 
+const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
+const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
+
 const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
 const DATA_SOURCE_TEST = 'alerts_enhanced.json';
 const DATA_SOURCE_EMPTY = 'alerts_empty.json';
@@ -664,9 +667,10 @@ function updateView() {
                             default:
                                 icon.classList.add("alert-item__icon--bus");
                                 routeName = `Line ${busRoute}`;
+                                icon.innerHTML = `<div>${item}</div>`;
                         }
 
-                        icon.innerHTML = `<div>${item}</div>`;
+                        
 
                         break;
                     case SERVICE.ACCESS:
