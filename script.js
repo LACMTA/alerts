@@ -221,10 +221,15 @@ function processAlerts(data) {
     // Update the view
     let i = 0;
     let n = 0;
+    
 
     data.forEach(alertFeed => {
         alertFeed.forEach(alert => {
             console.debug('-----------------------------------');
+
+            let today = new Date();
+            let endDate = new Date(formatDate(alert.activePeriods[0].end));
+
             // Check if informed_entity exists and is not empty
             if (!alert.informedEntities) {
                 console.error(`Alert ${alert.id} has no associated lines. Informed_entity doesn't exist.`);
@@ -232,6 +237,8 @@ function processAlerts(data) {
                 console.error(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
             } else if (!alert.activePeriods) {
                 console.error(`Alert ${alert.id} has no active_period`);
+            } else if (endDate < today) {
+                console.error(`Alert ${alert.id} is expired`);
             } else {
                 // This alert should be valid
                 let targetServiceArr;
