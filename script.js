@@ -245,7 +245,8 @@ function processAlerts(data) {
                     console.debug(`Alert ${alert.id} is an accessibility alert`);
                     targetServiceArr = allAlerts.access;
                     i++;
-                } else if (alert.headerText.toLowerCase().includes('elevator') || alert.headerText.toLowerCase().includes('escalator')) {
+                } else if (alert.headerText.toLowerCase().includes('elevator') || alert.headerText.toLowerCase().includes('escalator') || 
+                    alert.descriptionText.toLowerCase().includes('elevator') || alert.descriptionText.toLowerCase().includes('escalator')) {
                     // This is an accessibility-related alert from Swiftly
                     
                     console.debug(`Alert ${alert.id} is an access alert from Swiftly`);
