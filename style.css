@@ -160,3 +160,88 @@
   .usa-footer__secondary-section a {
     color: #fff;
   }
+
+  /**** MODAL STYLING ****/
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Modal Content */
+.modal {
+    background: white;
+    padding: 60px;
+    font-size: 21px;
+    line-height: 1.5em;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 640px;
+    width: 100%;
+    text-align: justify;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal h2 {
+    font-size: 30px;
+    letter-spacing: 0.26px;
+}
+
+.modal p {
+    margin-bottom: 20px;
+}
+
+.modalButton {
+    background-color: #2A5FD2;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 9px;
+    border: solid 2px #2A5FD2;
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.modalButton:hover, .modalButton:active {
+    background-color: white;
+    border: solid 2px #2A5FD2;
+    color: #2A5FD2;
+    cursor: pointer;
+}
+
+/* Open State */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0);
+}
+
+/* Close Button */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 60px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    color: #2A5FD2;
+}
