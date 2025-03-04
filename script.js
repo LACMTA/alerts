@@ -228,7 +228,7 @@ function processAlerts(data) {
             console.debug('-----------------------------------');
 
             let today = new Date();
-            let endDate = new Date(formatDate(alert.activePeriods[0].end));
+            let endDate = alert.activePeriods[0].end ? new Date(formatDate(alert.activePeriods[0].end)) : null;
 
             // Check if informed_entity exists and is not empty
             if (!alert.informedEntities) {
@@ -237,7 +237,7 @@ function processAlerts(data) {
                 console.error(`Alert ${alert.id} has no associated lines. Informed_entity length is 0`);
             } else if (!alert.activePeriods) {
                 console.error(`Alert ${alert.id} has no active_period`);
-            } else if (endDate < today) {
+            } else if (endDate != null && endDate < today) {
                 console.error(`Alert ${alert.id} is expired`);
             } else {
                 // This alert should be valid
