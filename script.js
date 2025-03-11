@@ -375,46 +375,46 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
     }
     
-    // MODAL
+    // // MODAL
 
-    /****** Modal Overlay */
-    const modalOverlay = document.getElementById("modalOverlay");
-    const closeModalBtn = document.getElementById("closeModal");
-    const modalButtons = document.querySelectorAll(".modalButton");
+    // /****** Modal Overlay */
+    // const modalOverlay = document.getElementById("modalOverlay");
+    // const closeModalBtn = document.getElementById("closeModal");
+    // const modalButtons = document.querySelectorAll(".modalButton");
 
-    function openModal() {
-        modalOverlay.classList.add("active");
-        modalOverlay.setAttribute("aria-hidden", "false");
-    }
+    // function openModal() {
+    //     modalOverlay.classList.add("active");
+    //     modalOverlay.setAttribute("aria-hidden", "false");
+    // }
 
-    function closeModal() {
-        modalOverlay.classList.remove("active");
-        modalOverlay.setAttribute("aria-hidden", "true");
-    }
+    // function closeModal() {
+    //     modalOverlay.classList.remove("active");
+    //     modalOverlay.setAttribute("aria-hidden", "true");
+    // }
 
-    closeModalBtn.addEventListener("click", closeModal);
-    modalOverlay.addEventListener("click", (e) => {
-        if (e.target === modalOverlay) closeModal();
-    });
+    // closeModalBtn.addEventListener("click", closeModal);
+    // modalOverlay.addEventListener("click", (e) => {
+    //     if (e.target === modalOverlay) closeModal();
+    // });
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-    });
+    // document.addEventListener("keydown", (e) => {
+    //     if (e.key === "Escape") closeModal();
+    // });
 
-    modalButtons.forEach((button) => {
-        button.addEventListener("mouseenter", () => {
-            button.style.transition = "background-color 0.5s ease-in-out";
-            button.style.backgroundColor = "white"; // Change to your desired color
-        });
+    // modalButtons.forEach((button) => {
+    //     button.addEventListener("mouseenter", () => {
+    //         button.style.transition = "background-color 0.5s ease-in-out";
+    //         button.style.backgroundColor = "white"; // Change to your desired color
+    //     });
 
-        button.addEventListener("mouseleave", () => {
-            button.style.transition = "background-color 0.5s ease-in-out";
-            button.style.backgroundColor = ""; // Resets to default
-        });
-    });
+    //     button.addEventListener("mouseleave", () => {
+    //         button.style.transition = "background-color 0.5s ease-in-out";
+    //         button.style.backgroundColor = ""; // Resets to default
+    //     });
+    // });
 
-    // Show modal popup
-    openModal();
+    // // Show modal popup
+    // openModal();
 
     // updateView();
 });
