@@ -71,6 +71,8 @@ let allAlerts = {
     access: accessAlerts
 };
 
+let systemwideAlerts = [];
+
 const fetchPromises = DATA_SOURCE.map(url => fetch(url, { method: "GET" })
     .then(response => {
         if (response.ok) {
@@ -297,7 +299,12 @@ function processAlerts(data) {
     
                 accumulatedAlerts.forEach(elem => {
                     n++;
-                    categorizeAndStoreAlert(splitLine(elem.routeId), elem.alert, targetServiceArr);
+                    if (elem.routeId == undefined) {
+                        // This is a systemwide alert
+                        systemwideAlerts.push(alert);
+                    } else {
+                        categorizeAndStoreAlert(splitLine(elem.routeId), elem.alert, targetServiceArr);
+                    }                    
                 });
     
                 console.debug(`${n} alerts added for alertId: ${alert.id}`);
@@ -598,6 +605,26 @@ function updateView() {
     let service = getServiceSelected();
     let nowvsLater = getStatusSelected();
     let routeName = '';
+
+    if (systemwideAlerts.length > 0) {
+        // Clear systemwide alerts
+        let systemwideAlertList = document.querySelector("#systemwideAlertList");
+        systemwideAlertList.innerHTML = '';        
+
+        systemwideAlerts.forEach(alert => {
+            // Create alert-item element
+            let newAlert = document.createElement("div");
+            newAlert.classList.add("systemwideAlertItem");
+            newAlert.setAttribute('data-alert-id', alert.id);
+
+            let systemwideAlertText = `<strong>${alert.headerText}:</strong> ${alert.descriptionText}`;
+
+            newAlert.innerHTML = systemwideAlertText;
+            systemwideAlertList.appendChild(newAlert);
+        });
+        // undo display: none
+        // systemwideAlertList.style.display = 'flex';
+    }
 
     switch (serviceSelected) {
         case SERVICE.RAIL:
