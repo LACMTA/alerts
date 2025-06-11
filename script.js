@@ -612,20 +612,22 @@ function updateView() {
         systemwideAlertList.innerHTML = '';        
 
         // Use just the first alert FOR NOW. THIS IS A SHITTY FIX TO AVOID DUPLICATED SYSTEMWIDE ALERTS
-        let alert = systemwideAlerts[0];
+        // let alert = systemwideAlerts[0];
 
-        // Create alert-item element
-        let newAlert = document.createElement("div");
-        newAlert.classList.add("systemwideAlertItem");
-        newAlert.setAttribute('data-alert-id', alert.id);
+        systemwideAlerts.forEach((alert, index) => {
+            // Create alert-item element
+            let newAlert = document.createElement("div");
+            newAlert.classList.add("systemwideAlertItem");
+            newAlert.setAttribute('data-alert-id', alert.id);
 
-        let systemwideAlertText = `<strong>${alert.headerText}:</strong> ${alert.descriptionText}`;
+            let systemwideAlertText = `<strong>${alert.headerText}:</strong> ${alert.descriptionText.replaceAll('\n', '<br>')}`;
 
-        newAlert.innerHTML = systemwideAlertText;
-        systemwideAlertList.appendChild(newAlert);
+            newAlert.innerHTML = systemwideAlertText;
+            systemwideAlertList.appendChild(newAlert);
         
-        // undo display: none
-        systemwideAlertList.style.display = 'flex';
+            // undo display: none
+            systemwideAlertList.style.display = 'flex';
+        });
     }
 
     switch (serviceSelected) {
