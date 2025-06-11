@@ -558,7 +558,7 @@ function updateAccessView() {
                 let content_description = document.createElement('div');
                 content_description.classList.add("alert-item__description");
 
-                let descriptionText = alert.descriptionText;
+                let descriptionText = alert.descriptionText.replaceAll('\n', '<br>');
 
                 content_description.innerHTML += descriptionText.length > 0 ? descriptionText + "<br>": '';
 
@@ -782,7 +782,7 @@ function updateView() {
 
                 if (alert.descriptionText != '') {    
                     content_description.classList.add("alert-item__description");
-                    content_description.innerHTML = alert.descriptionText + '<br><br>';
+                    content_description.innerHTML = alert.descriptionText.replaceAll('\n', '<br>') + '<br><br>';
                 }
 
                 // Not a good idea if we default the URL to https://alerts.metro.net
