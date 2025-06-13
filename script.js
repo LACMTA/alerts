@@ -4,13 +4,14 @@ const RAIL_AGENCY_ID = 'lametro-rail';
 const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
 const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
 
-const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
-const DATA_SOURCE_TEST = 'alerts_enhanced.json';
-const DATA_SOURCE_EMPTY = 'alerts_empty.json';
+// not used
+// const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
+// const DATA_SOURCE_TEST = 'alerts_enhanced.json';
+// const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
-const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
-
+// const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
 // const DATA_SOURCE = DATA_SOURCE_COMBINED;
+
 const DATA_SOURCE = [BUS_ALERTS, RAIL_ALERTS];
 
 const SERVICE = {
