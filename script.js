@@ -4,13 +4,14 @@ const RAIL_AGENCY_ID = 'lametro-rail';
 const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
 const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
 
-const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
-const DATA_SOURCE_TEST = 'alerts_enhanced.json';
-const DATA_SOURCE_EMPTY = 'alerts_empty.json';
+// not used
+// const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
+// const DATA_SOURCE_TEST = 'alerts_enhanced.json';
+// const DATA_SOURCE_EMPTY = 'alerts_empty.json';
 
-const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
-
+// const DATA_SOURCE_COMBINED = 'https://7b9l1n0nb6.execute-api.us-west-1.amazonaws.com/alerts-combined';
 // const DATA_SOURCE = DATA_SOURCE_COMBINED;
+
 const DATA_SOURCE = [BUS_ALERTS, RAIL_ALERTS];
 
 const SERVICE = {
@@ -382,48 +383,48 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('#status-nav--upcoming').addEventListener('click', handleStatusClick.bind(STATUS.UPCOMING));
     }
     
-    // // MODAL
+    // MODAL
 
-    // /****** Modal Overlay */
-    // const modalOverlay = document.getElementById("modalOverlay");
-    // const closeModalBtn = document.getElementById("closeModal");
-    // const modalButtons = document.querySelectorAll(".modalButton");
+    /****** Modal Overlay */
+    const modalOverlay = document.getElementById("modalOverlay");
+    const closeModalBtn = document.getElementById("closeModal");
+    const modalButtons = document.querySelectorAll(".modalButton");
 
-    // function openModal() {
-    //     modalOverlay.classList.add("active");
-    //     modalOverlay.setAttribute("aria-hidden", "false");
-    // }
+    function openModal() {
+        modalOverlay.classList.add("active");
+        modalOverlay.setAttribute("aria-hidden", "false");
+    }
 
-    // function closeModal() {
-    //     modalOverlay.classList.remove("active");
-    //     modalOverlay.setAttribute("aria-hidden", "true");
-    // }
+    function closeModal() {
+        modalOverlay.classList.remove("active");
+        modalOverlay.setAttribute("aria-hidden", "true");
+    }
 
-    // closeModalBtn.addEventListener("click", closeModal);
-    // modalOverlay.addEventListener("click", (e) => {
-    //     if (e.target === modalOverlay) closeModal();
-    // });
+    closeModalBtn.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
 
-    // document.addEventListener("keydown", (e) => {
-    //     if (e.key === "Escape") closeModal();
-    // });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+    });
 
-    // modalButtons.forEach((button) => {
-    //     button.addEventListener("mouseenter", () => {
-    //         button.style.transition = "background-color 0.5s ease-in-out";
-    //         button.style.backgroundColor = "white"; // Change to your desired color
-    //     });
+    modalButtons.forEach((button) => {
+        button.addEventListener("mouseenter", () => {
+            button.style.transition = "background-color 0.5s ease-in-out";
+            button.style.backgroundColor = "white"; // Change to your desired color
+        });
 
-    //     button.addEventListener("mouseleave", () => {
-    //         button.style.transition = "background-color 0.5s ease-in-out";
-    //         button.style.backgroundColor = ""; // Resets to default
-    //     });
-    // });
+        button.addEventListener("mouseleave", () => {
+            button.style.transition = "background-color 0.5s ease-in-out";
+            button.style.backgroundColor = ""; // Resets to default
+        });
+    });
 
-    // // Show modal popup
-    // openModal();
+    // Show modal popup
+    openModal();
 
-    // updateView();
+    updateView();
 });
 
 function handleServiceClick(e) {

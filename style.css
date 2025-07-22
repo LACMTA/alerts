@@ -107,17 +107,6 @@
     line-height: 20px;
 }
 
-/* Breakpoints for standard screen sizes */
-@media only screen and (max-width: 599px) { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */ 
-}
-
-@media only screen and (min-width: 600px) { /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ 
-}
-
-@media only screen and (min-width: 1025px) { /* big landscape tablets, laptops, and desktops */ 
-}
-
-
 /* HEADER & FOOTER STYLING */
 .header {
     flex-direction: row;
@@ -260,4 +249,31 @@
 
 .systemwideAlertItem {
     width: 100%;
+}
+
+/* Breakpoints for standard screen sizes */
+@media only screen and (max-width: 599px) { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */ 
+    .modal {
+        padding: 20px;
+        font-size: 16px;
+        max-width: 90%;
+        height: auto;
+        overflow-y: auto;
+      }
+    
+      .modal h2 {
+        font-size: 22px;
+      }
+    
+      .close-btn {
+        font-size: 40px;
+        top: 5px;
+        right: 10px;
+      }
+}
+
+@media only screen and (min-width: 600px) { /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ 
+}
+
+@media only screen and (min-width: 1025px) { /* big landscape tablets, laptops, and desktops */ 
 }
