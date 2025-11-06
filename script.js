@@ -431,7 +431,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } else {
         // remove modalOverlay from DOM if not showing the survey popup
-        modalOverlay.remove();
+        if (modalOverlay) {
+            modalOverlay.remove();
+        }
     }
 
     // Modal Popup End
