@@ -4,6 +4,8 @@ const RAIL_AGENCY_ID = 'lametro-rail';
 const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
 const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
 
+const SHOW_CX_SURVEY_POPUP = false;
+
 // not used
 // const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
 // const DATA_SOURCE_TEST = 'alerts_enhanced.json';
@@ -422,7 +424,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Show modal popup
-    openModal();
+    if (SHOW_CX_SURVEY_POPUP) {
+        openModal();
+    } else {
+        // remove modalOverlay from DOM if not showing the survey popup
+        modalOverlay.remove();
+    }
 
     // Modal Popup End
 
