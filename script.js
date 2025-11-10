@@ -4,6 +4,8 @@ const RAIL_AGENCY_ID = 'lametro-rail';
 const BUS_ALERTS = 'https://lbwlhl4z4pktjvxw3tm6emxfui0kwjiv.lambda-url.us-west-1.on.aws/';
 const RAIL_ALERTS = 'https://5cgdcfl7csnoiymgfhjp5bqgii0yxifx.lambda-url.us-west-1.on.aws/';
 
+const SHOW_CX_SURVEY_POPUP = false;
+
 // not used
 // const DATA_SOURCE_PROD = 'https://pveqxgqnqpmamg2lfxgv4akoau0rabtm.lambda-url.us-west-1.on.aws/';
 // const DATA_SOURCE_TEST = 'alerts_enhanced.json';
@@ -387,42 +389,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /****** Modal Overlay */
     const modalOverlay = document.getElementById("modalOverlay");
-    const closeModalBtn = document.getElementById("closeModal");
-    const modalButtons = document.querySelectorAll(".modalButton");
 
-    function openModal() {
-        modalOverlay.classList.add("active");
-        modalOverlay.setAttribute("aria-hidden", "false");
-    }
+    if (SHOW_CX_SURVEY_POPUP) {
+        const closeModalBtn = document.getElementById("closeModal");
+        const modalButtons = document.querySelectorAll(".modalButton");
 
-    function closeModal() {
-        modalOverlay.classList.remove("active");
-        modalOverlay.setAttribute("aria-hidden", "true");
-    }
+        function openModal() {
+            modalOverlay.classList.add("active");
+            modalOverlay.setAttribute("aria-hidden", "false");
+        }
 
-    closeModalBtn.addEventListener("click", closeModal);
-    modalOverlay.addEventListener("click", (e) => {
-        if (e.target === modalOverlay) closeModal();
-    });
+        function closeModal() {
+            modalOverlay.classList.remove("active");
+            modalOverlay.setAttribute("aria-hidden", "true");
+        }
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-    });
-
-    modalButtons.forEach((button) => {
-        button.addEventListener("mouseenter", () => {
-            button.style.transition = "background-color 0.5s ease-in-out";
-            button.style.backgroundColor = "white"; // Change to your desired color
+        closeModalBtn.addEventListener("click", closeModal);
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) closeModal();
         });
 
-        button.addEventListener("mouseleave", () => {
-            button.style.transition = "background-color 0.5s ease-in-out";
-            button.style.backgroundColor = ""; // Resets to default
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeModal();
         });
-    });
 
-    // Show modal popup
-    openModal();
+        modalButtons.forEach((button) => {
+            button.addEventListener("mouseenter", () => {
+                button.style.transition = "background-color 0.5s ease-in-out";
+                button.style.backgroundColor = "white"; // Change to your desired color
+            });
+
+            button.addEventListener("mouseleave", () => {
+                button.style.transition = "background-color 0.5s ease-in-out";
+                button.style.backgroundColor = ""; // Resets to default
+            });
+        });
+
+        // Show modal popup
+
+        openModal();
+
+    } else {
+        // remove modalOverlay from DOM if not showing the survey popup
+        if (modalOverlay) {
+            modalOverlay.remove();
+        }
+    }
 
     // Modal Popup End
 
