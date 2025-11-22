@@ -7,6 +7,7 @@
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
+import axios from 'axios';
 
 export default {
 	async fetch(request, env, ctx) {
