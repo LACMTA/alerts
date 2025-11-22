@@ -36,9 +36,11 @@ export default {
 
 					const alertResponse = {
 						statusCode: 200,
-						// headers: {
-						//   "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-						// },
+						headers: {
+							'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+							'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+							'Access-Control-Allow-Headers': 'Content-Type',
+						},
 						body: JSON.stringify(data),
 					};
 
@@ -67,11 +69,11 @@ export default {
 
 					const alertResponse = {
 						statusCode: 200,
-						// headers: {
-						//   "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-						//   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-						//   "Access-Control-Allow-Headers": "Content-Type"
-						// },
+						headers: {
+							'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+							'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+							'Access-Control-Allow-Headers': 'Content-Type',
+						},
 						body: JSON.stringify(data),
 					};
 
