@@ -20,7 +20,7 @@ export default {
 					headers: { 'Content-Type': 'text/plain' },
 				});
 
-			case '/api/alerts/bus':
+			case '/alerts/bus':
 				const busOptions = {
 					method: 'GET',
 					url: 'https://api.goswift.ly/rider-alerts/v2',
@@ -51,7 +51,7 @@ export default {
 					};
 				}
 
-			case '/api/alerts/rail':
+			case '/alerts/rail':
 				const railOptions = {
 					method: 'GET',
 					url: 'https://api.goswift.ly/rider-alerts/v2',
