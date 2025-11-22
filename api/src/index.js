@@ -27,7 +27,7 @@ export default {
 					params: { agency: 'lametro' },
 					headers: {
 						Accept: 'application/json, application/json; charset=utf-8, text/csv; charset=utf-8',
-						Authorization: process.env.API_KEY,
+						Authorization: env.API_KEY,
 					},
 				};
 				try {
@@ -60,7 +60,7 @@ export default {
 					params: { agency: 'lametro-rail' },
 					headers: {
 						Accept: 'application/json, application/json; charset=utf-8, text/csv; charset=utf-8',
-						Authorization: process.env.API_KEY,
+						Authorization: env.API_KEY,
 					},
 				};
 				try {
