@@ -13,6 +13,7 @@ export default {
 	async fetch(request, env, ctx) {
 		const url = new URL(request.url);
 		const path = url.pathname;
+		console.log(env);
 
 		// Handle different routes
 		switch (path) {
@@ -35,23 +36,21 @@ export default {
 					const { data } = await axios.request(busOptions);
 					console.log(data);
 
-					const alertResponse = {
-						statusCode: 200,
+					const alertResponse = new Response(JSON.stringify(data), {
+						status: 200,
 						headers: {
 							'Access-Control-Allow-Origin': '*', // Required for CORS support to work
 							'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 							'Access-Control-Allow-Headers': 'Content-Type',
 						},
-						body: JSON.stringify(data),
-					};
+					});
 
 					return alertResponse;
 				} catch (error) {
 					console.error(error);
-					return {
+					return new Response(JSON.stringify(error), {
 						statusCode: 400,
-						body: JSON.stringify(e),
-					};
+					});
 				}
 
 			case '/alerts/rail':
@@ -68,23 +67,21 @@ export default {
 					const { data } = await axios.request(railOptions);
 					console.log(data);
 
-					const alertResponse = {
-						statusCode: 200,
+					const alertResponse = new Response(JSON.stringify(data), {
+						status: 200,
 						headers: {
 							'Access-Control-Allow-Origin': '*', // Required for CORS support to work
 							'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 							'Access-Control-Allow-Headers': 'Content-Type',
 						},
-						body: JSON.stringify(data),
-					};
+					});
 
 					return alertResponse;
 				} catch (error) {
 					console.error(error);
-					return {
+					return new Response(JSON.stringify(error), {
 						statusCode: 400,
-						body: JSON.stringify(e),
-					};
+					});
 				}
 
 			default:
