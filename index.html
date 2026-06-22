@@ -114,13 +114,9 @@
       </div>
     </header>
     <div class="content-wrapper">
-
-      <div class="beta-callout">
+      <div class="beta-callout" id="wc-alert" style="display: none">
         ⚽ Check for real-time
-        <a
-          href="" id="wc-link"
-          >updates about World Cup Enhanced Service</a
-        >
+        <a href="" id="wc-link">updates about World Cup Enhanced Service</a>
         and parking availability for the <span id="wc-game"></span>
       </div>
       <div class="beta-callout">
@@ -290,59 +286,65 @@
 
       let wcGameData = [
         {
-          "date": "2026-06-12",
-          "url": "https://wp.me/pfeql1-CdE",
-          "text": "Friday, June 12 match, USA vs Paraguay"
-        },{
-          "date": "2026-06-15",
-          "url": "https://wp.me/pfeql1-CdG",
-          "text": "Monday, June 15 match, Iran vs New Zealand"
+          date: "2026-06-12",
+          url: "https://wp.me/pfeql1-CdE",
+          text: "Friday, June 12 match, USA vs Paraguay",
         },
         {
-          "date": "2026-06-18",
-          "url": "https://wp.me/pfeql1-CdI",
-          "text": "Thursday, June 18 match, Switzerland vs Bosnia-Herzegovina"
+          date: "2026-06-15",
+          url: "https://wp.me/pfeql1-CdG",
+          text: "Monday, June 15 match, Iran vs New Zealand",
         },
         {
-          "date": "2026-06-21",
-          "url": "https://wp.me/pfeql1-CdK",
-          "text": "Sunday, June 21 match, Belgium vs Iran"
+          date: "2026-06-18",
+          url: "https://wp.me/pfeql1-CdI",
+          text: "Thursday, June 18 match, Switzerland vs Bosnia-Herzegovina",
         },
         {
-          "date": "2026-06-25",
-          "url": "https://wp.me/pfeql1-CdK",
-          "text": "Thursday, June 25 match, USA vs Turkiye"
+          date: "2026-06-21",
+          url: "https://wp.me/pfeql1-CdK",
+          text: "Sunday, June 21 match, Belgium vs Iran",
         },
         {
-          "date": "2026-06-28",
-          "url": "https://wp.me/pfeql1-CdK",
-          "text": "Sunday, June 28 match"
+          date: "2026-06-25",
+          url: "https://wp.me/pfeql1-CdK",
+          text: "Thursday, June 25 match, USA vs Turkiye",
         },
         {
-          "date": "2026-07-02",
-          "url": "https://wp.me/pfeql1-CdK",
-          "text": "Thursday, July 2 match"
+          date: "2026-06-28",
+          url: "https://wp.me/pfeql1-CdK",
+          text: "Sunday, June 28 match",
         },
         {
-          "date": "2026-07-10",
-          "url": "https://wp.me/pfeql1-CdK",
-          "text": "Friday, July 10 match"
-        }
+          date: "2026-07-02",
+          url: "https://wp.me/pfeql1-CdK",
+          text: "Thursday, July 2 match",
+        },
+        {
+          date: "2026-07-10",
+          url: "https://wp.me/pfeql1-CdK",
+          text: "Friday, July 10 match",
+        },
       ];
 
-      let calloutLink = document.querySelector('#wc-link');
-      let calloutText = document.querySelector('#wc-game');
+      let calloutLink = document.querySelector("#wc-link");
+      let calloutText = document.querySelector("#wc-game");
+      let callout = document.querySelector("#wc-alert");
       let now = new Date();
 
-      wcGameData.forEach((elem) => {
-        let gameDate = new Date(elem.date);
+      for (let elem of wcGameData) {
+        let [year, month, day] = elem.date.split("-").map(Number);
 
-        if (now >= gameDate) {
-          calloutLink.setAttribute('href', elem.url);
+        let windowStart = new Date(year, month - 1, day - 1);
+        let windowEnd = new Date(year, month - 1, day + 2);
+
+        if (now >= windowStart && now < windowEnd) {
+          calloutLink.setAttribute("href", elem.url);
           calloutText.textContent = elem.text;
-          return;
-        }        
-      });
+          callout.style.display = "block";
+          break;
+        }
+      }
     </script>
   </body>
 </html>
