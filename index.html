@@ -336,7 +336,7 @@
         let [year, month, day] = elem.date.split("-").map(Number);
 
         let windowStart = new Date(year, month - 1, day - 1);
-        let windowEnd = new Date(year, month - 1, day + 2);
+        let windowEnd = new Date(year, month - 1, day + 1);
 
         if (now >= windowStart && now < windowEnd) {
           calloutLink.setAttribute("href", elem.url);
