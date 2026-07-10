@@ -114,11 +114,6 @@
       </div>
     </header>
     <div class="content-wrapper">
-      <div class="beta-callout" id="wc-alert" style="display: none">
-        ⚽ Check for real-time
-        <a href="" id="wc-link">updates about World Cup Enhanced Service</a>
-        and parking availability for the <span id="wc-game"></span>
-      </div>
       <div class="beta-callout">
         📣 We're improving this page.
         <a href="https://ride.metro.net/alerts">Try the new version!</a>
@@ -265,86 +260,6 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-      /*
-      USA vs Paraguay https://wp.me/pfeql1-CdE,
- 
-      Iran vs New Zealand https://wp.me/pfeql1-CdG,
-      
-      Switzerland vs Bosnia-Herzegovina https://wp.me/pfeql1-CdI
-      
-      Belgium vs Iran https://wp.me/pfeql1-CdK
-      
-      USA vs Turkey https://wp.me/pfeql1-CdN
-      
-      Round of 32 June 28 https://wp.me/pfeql1-CdP
-      
-      Round of 32 July 2 https://wp.me/pfeql1-CdR
-      
-      Quarterfinal July 10 https://wp.me/pfeql1-CdT
-      */
 
-      let wcGameData = [
-        {
-          date: "2026-06-12",
-          url: "https://wp.me/pfeql1-CdE",
-          text: "Friday, June 12 match, USA vs Paraguay",
-        },
-        {
-          date: "2026-06-15",
-          url: "https://wp.me/pfeql1-CdG",
-          text: "Monday, June 15 match, Iran vs New Zealand",
-        },
-        {
-          date: "2026-06-18",
-          url: "https://wp.me/pfeql1-CdI",
-          text: "Thursday, June 18 match, Switzerland vs Bosnia-Herzegovina",
-        },
-        {
-          date: "2026-06-21",
-          url: "https://wp.me/pfeql1-CdK",
-          text: "Sunday, June 21 match, Belgium vs Iran",
-        },
-        {
-          date: "2026-06-25",
-          url: "https://wp.me/pfeql1-CdK",
-          text: "Thursday, June 25 match, USA vs Turkiye",
-        },
-        {
-          date: "2026-06-28",
-          url: "https://thesource.metro.net/metro-service-updates-for-canada-vs-south-africa-on-sunday-june-28/",
-          text: "Sunday, June 28 match",
-        },
-        {
-          date: "2026-07-02",
-          url: "https://thesource.metro.net/metro-service-updates-for-spain-vs-austria-on-thursday-july-2/",
-          text: "Thursday, July 2, Spain vs Austria",
-        },
-        {
-          date: "2026-07-10",
-          url: "https://thesource.metro.net/metro-service-updates-for-spain-vs-belgium-quarterfinal-on-friday-july-10/",
-          text: "Friday, July 10, Spain vs Belgium",
-        },
-      ];
-
-      let calloutLink = document.querySelector("#wc-link");
-      let calloutText = document.querySelector("#wc-game");
-      let callout = document.querySelector("#wc-alert");
-      let now = new Date();
-
-      for (let elem of wcGameData) {
-        let [year, month, day] = elem.date.split("-").map(Number);
-
-        let windowStart = new Date(year, month - 1, day);
-        let windowEnd = new Date(year, month - 1, day + 2);
-
-        if (now >= windowStart && now < windowEnd) {
-          calloutLink.setAttribute("href", elem.url);
-          calloutText.textContent = elem.text;
-          callout.style.display = "block";
-          break;
-        }
-      }
-    </script>
   </body>
 </html>
