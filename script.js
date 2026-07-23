@@ -293,19 +293,21 @@ function processAlerts(data) {
         alert.informedEntities.forEach((elem, i) => {
           n = 0;
 
-          let routeId = elem.routeId;
+          if (elem.routeId) {
+            let routeId = elem.routeId;
 
-          if (!affectedRoutes.includes(routeId)) {
-            // simplifiedAlert = alert;
-            // simplifiedalert.informedEntities = [elem];
-            affectedRoutes.push(routeId);
+            if (!affectedRoutes.includes(routeId)) {
+              // simplifiedAlert = alert;
+              // simplifiedalert.informedEntities = [elem];
+              affectedRoutes.push(routeId);
 
-            accumulatedAlerts.push({
-              routeId: routeId,
-              alert: alert,
-            });
+              accumulatedAlerts.push({
+                routeId: routeId,
+                alert: alert,
+              });
 
-            console.debug(`Route ${routeId} added to affectedRoutes`);
+              console.debug(`Route ${routeId} added to affectedRoutes`);
+            }    
           }
         });
 
